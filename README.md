@@ -1,2 +1,2 @@
 # Diploma-API
-Repository for development diploma work
+Repository to development API (Back End) for diploma work
