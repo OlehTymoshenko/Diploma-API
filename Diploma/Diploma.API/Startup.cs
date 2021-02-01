@@ -65,7 +65,7 @@ namespace Diploma.API
 
                 app.UseSwaggerUI(options =>
                 {
-                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "DIPLOMA API V0.1");
+                    options.SwaggerEndpoint("/swagger/v0.1/swagger.json", "DIPLOMA API V0.1");
                 });
             }
 
