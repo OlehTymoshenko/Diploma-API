@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diploma.API", "Diploma.API\Diploma.API.csproj", "{BB9BFBEB-C049-4EC1-949A-F937CC5CCA39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Diploma.API", "Diploma.API\Diploma.API.csproj", "{BB9BFBEB-C049-4EC1-949A-F937CC5CCA39}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DL", "DL", "{FBC10E3C-B62A-461C-B3BD-92F54B3A3A1F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PL", "PL", "{2F7828B1-EF2E-4A03-A793-CCFC2EE8FE83}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BL", "BL", "{2ADD1116-771D-4044-8434-6127697DB5B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj", "{0C9E0F15-B0CA-457D-B788-74961630F538}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +23,17 @@ Global
 		{BB9BFBEB-C049-4EC1-949A-F937CC5CCA39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB9BFBEB-C049-4EC1-949A-F937CC5CCA39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB9BFBEB-C049-4EC1-949A-F937CC5CCA39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C9E0F15-B0CA-457D-B788-74961630F538}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C9E0F15-B0CA-457D-B788-74961630F538}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C9E0F15-B0CA-457D-B788-74961630F538}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C9E0F15-B0CA-457D-B788-74961630F538}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BB9BFBEB-C049-4EC1-949A-F937CC5CCA39} = {2F7828B1-EF2E-4A03-A793-CCFC2EE8FE83}
+		{0C9E0F15-B0CA-457D-B788-74961630F538} = {2F7828B1-EF2E-4A03-A793-CCFC2EE8FE83}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C4B3BC3C-3EF0-472B-BEE1-87743C4175F7}
