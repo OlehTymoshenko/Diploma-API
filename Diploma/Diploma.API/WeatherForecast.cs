@@ -1,6 +1,6 @@
 using System;
 
-namespace Diploma.API
+namespace PL.Diploma.API
 {
     public class WeatherForecast
     {

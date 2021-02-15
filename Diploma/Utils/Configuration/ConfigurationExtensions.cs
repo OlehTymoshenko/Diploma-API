@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using Utils.Configuration.Sections;
+using PL.Utils.Configuration.Sections;
 
-namespace Utils.Configuration
+namespace PL.Utils.Configuration
 {
     public static class ConfigurationExtensions
     {

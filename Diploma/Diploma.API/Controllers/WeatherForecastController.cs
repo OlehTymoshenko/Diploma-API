@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Diploma.API.Controllers
+namespace PL.Diploma.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]

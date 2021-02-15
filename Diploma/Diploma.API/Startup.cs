@@ -12,10 +12,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Utils.Swagger;
-using Utils.Configuration;
+using PL.Utils.Swagger;
+using PL.Utils.Configuration;
 
-namespace Diploma.API
+namespace PL.Diploma.API
 {
     public class Startup
     {

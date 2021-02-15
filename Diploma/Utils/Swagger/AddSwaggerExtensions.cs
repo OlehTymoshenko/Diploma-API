@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System;
 
-namespace Utils.Swagger
+namespace PL.Utils.Swagger
 {
     public static class SwaggerServiceExtension
     {

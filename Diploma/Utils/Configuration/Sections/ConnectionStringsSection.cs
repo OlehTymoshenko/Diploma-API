@@ -1,5 +1,5 @@
 ﻿
-namespace Utils.Configuration.Sections
+namespace PL.Utils.Configuration.Sections
 {
     public class ConnectionStringsSection
     {
