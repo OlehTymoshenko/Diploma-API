@@ -6,7 +6,7 @@ using System;
 
 namespace PL.Utils.Swagger
 {
-    public static class SwaggerServiceExtension
+    public static class SwaggerExtensions
     {
         public static IServiceCollection AddSwaggerDocs(this IServiceCollection services, string xmlPath)
         {
