@@ -1,5 +1,5 @@
 ﻿
-namespace PL.Utils.Configuration.Sections
+namespace Common.Configurations.Sections
 {
     public class AppSettingsSection
     {

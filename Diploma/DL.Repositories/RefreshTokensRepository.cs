@@ -4,11 +4,12 @@ using System.Text;
 using DL.Entities;
 using DL.Repositories.Abstractions;
 using DL.Interfaces.Repositories;
+using DL.EF.Context;
 
 namespace DL.Repositories
 {
-    class RefreshTokensRepository : GenericRepository<RefreshToken>, IRefreshTokensRepository  
+    public class RefreshTokensRepository : GenericRepository<RefreshToken>, IRefreshTokensRepository  
     {
-
+        public RefreshTokensRepository(ApplicationDbContext appDbContext) : base(appDbContext) { }
     }
 }

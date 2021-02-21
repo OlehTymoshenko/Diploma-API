@@ -13,7 +13,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using PL.Utils.Swagger;
-using PL.Utils.Configuration;
+using Common.Configurations;
 
 namespace PL.Diploma.API
 {

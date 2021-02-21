@@ -1,7 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DL.EF.Context\DL.EF.Context.csproj" />
+    <ProjectReference Include="..\DL.Interfaces\DL.Interfaces.csproj" />
+    <ProjectReference Include="..\DL.Repositories\DL.Repositories.csproj" />
+  </ItemGroup>
 
 </Project>

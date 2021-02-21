@@ -6,9 +6,10 @@ using DL.Interfaces.Repositories;
 
 namespace DL.Interfaces.UnitOfWork
 {
-    interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
         public IUsersRepository Users { get; }
+        public IRolesRepository Roles { get; }
         public IRefreshTokensRepository RefreshTokens { get; }
 
         int SaveChanges();

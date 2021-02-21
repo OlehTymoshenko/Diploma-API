@@ -8,8 +8,8 @@ using DL.Repositories.Abstractions;
 
 namespace DL.Repositories
 {
-    public class UsersReporitory : GenericRepository<User>,  IUsersRepository
+    public class RolesRepository : GenericRepository<Role>, IRolesRepository
     {
-        public UsersReporitory(ApplicationDbContext appDbContext) : base(appDbContext) { }
+        public RolesRepository(ApplicationDbContext appDbContext) : base(appDbContext) { }
     }
 }
