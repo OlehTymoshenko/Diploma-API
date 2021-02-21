@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DL.Context
+namespace DL.EF.Migrations
 {
     public class Class1
     {

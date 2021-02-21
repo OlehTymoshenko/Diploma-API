@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DIExtesion\DL.DIExtesion.csproj" />
-    <ProjectReference Include="..\Utils\PL.Utils.csproj" />
+    <ProjectReference Include="..\Common.Configurations\Common.Configurations.csproj" />
+    <ProjectReference Include="..\PL.Utils\PL.Utils.csproj" />
   </ItemGroup>
 
 
