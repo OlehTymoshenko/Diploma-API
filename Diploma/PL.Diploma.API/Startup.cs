@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using PL.Utils.Swagger;
 using Common.Configurations;
+using DL.DIExtesion;
 
 namespace PL.Diploma.API
 {
@@ -29,11 +30,14 @@ namespace PL.Diploma.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAppConfigurationSections(Configuration);
+
+            services.AddDataLayer(Configuration);
+            
             services.AddCors();
             
             services.AddControllers();
 
-            services.AddAppConfigurationSections(Configuration);
 
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);

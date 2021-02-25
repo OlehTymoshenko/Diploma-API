@@ -9,16 +9,18 @@ using DL.Interfaces.UnitOfWork;
 using DL.Interfaces.Repositories;
 using DL.Repositories;
 using DL.UnitOfWork;
+using Microsoft.Extensions.Configuration;
 
 namespace DL.DIExtesion
 {
     public static class DataLayerExtensions
     {
-        public static IServiceCollection AddDataLayer(this IServiceCollection services, IOptions<ConnectionStringsSection> options)
+        public static IServiceCollection AddDataLayer(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(opt =>
             {
-                opt.UseNpgsql(options.Value.NpgsqlConnection, 
+                var a = typeof(Migrations).Assembly.GetName().Name;
+                opt.UseNpgsql(configuration.GetConnectionString("NpgsqlConnection"), 
                     npgsqlOpt => npgsqlOpt.MigrationsAssembly(typeof(Migrations).Assembly.GetName().Name));
             });
 
