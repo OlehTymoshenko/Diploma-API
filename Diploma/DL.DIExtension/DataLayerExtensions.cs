@@ -3,12 +3,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Common.Configurations.Sections;
 using Microsoft.Extensions.Options;
-using DL.EF.Migrations;
 using DL.EF.Context;
 using DL.Interfaces.UnitOfWork;
 using DL.Interfaces.Repositories;
 using DL.Repositories;
-using DL.UnitOfWork;
 using Microsoft.Extensions.Configuration;
 
 namespace DL.DIExtesion
@@ -19,9 +17,8 @@ namespace DL.DIExtesion
         {
             services.AddDbContext<ApplicationDbContext>(opt =>
             {
-                var a = typeof(Migrations).Assembly.GetName().Name;
                 opt.UseNpgsql(configuration.GetConnectionString("NpgsqlConnection"), 
-                    npgsqlOpt => npgsqlOpt.MigrationsAssembly(typeof(Migrations).Assembly.GetName().Name));
+                    npgsqlOpt => npgsqlOpt.MigrationsAssembly("DL.EF.Migrations"));
             });
 
             services.PerformMigration();
