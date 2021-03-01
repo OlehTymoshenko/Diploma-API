@@ -11,5 +11,6 @@ namespace PL.Diploma.API.Controllers
     [ApiController]
     public class IdentityController : ControllerBase
     {
+
     }
 }

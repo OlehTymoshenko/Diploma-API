@@ -2,6 +2,7 @@
 using DL.Interfaces.Repositories;
 using DL.Interfaces.UnitOfWork;
 using DL.EF.Context;
+using System;
 
 namespace DL.UnitOfWork
 {
@@ -43,6 +44,7 @@ namespace DL.UnitOfWork
         public void Dispose()
         {
             _appDbContext?.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

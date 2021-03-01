@@ -37,7 +37,7 @@ namespace PL.Utils.Swagger
                 options.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
-                    {securityScheme, Array.Empty<string>()}
+                    { securityScheme, Array.Empty<string>() }
                 });
 
                 options.IncludeXmlComments(xmlPath);
