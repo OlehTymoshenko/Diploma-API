@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DL.EF.EntitiyConfigurations\DL.EF.EntitiyConfigurations.csproj" />
     <ProjectReference Include="..\DL.Entities\DL.Entities.csproj" />
   </ItemGroup>
 

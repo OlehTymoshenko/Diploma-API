@@ -58,6 +58,13 @@ namespace DL.EF.Migrations.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Name = "client"
+                        });
                 });
 
             modelBuilder.Entity("DL.Entities.User", b =>
@@ -80,9 +87,6 @@ namespace DL.EF.Migrations.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Password")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Username")
                         .HasColumnType("text");
 
                     b.HasKey("Id");

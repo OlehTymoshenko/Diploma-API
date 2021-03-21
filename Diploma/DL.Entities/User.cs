@@ -17,8 +17,8 @@ namespace DL.Entities
 
         public DateTime CreateDateTime { get; set; }
 
-        public ICollection<Role> Roles { get; set; }
+        public ICollection<Role> Roles { get; set; } = new List<Role>();
 
-        public ICollection<RefreshToken> RefreshTokens { get; set; }
+        public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     }
 }

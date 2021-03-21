@@ -5,12 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BL.Models\BL.Models.csproj" />
     <ProjectReference Include="..\DL.Entities\DL.Entities.csproj" />
+    <ProjectReference Include="..\DL.Infrastructure\DL.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

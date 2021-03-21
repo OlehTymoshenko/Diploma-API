@@ -11,7 +11,9 @@ namespace DL.Interfaces.Repositories.Abstractions
     {
         Task<TEntity> GetByIdAsync(int id);
 
-        Task<IEnumerable<TEntity>> GetAllAsync();
+        Task<IEnumerable<TEntity>> SelectAsync();
+        
+        Task<IEnumerable<TEntity>> SelectAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes);
 
         Task AddAsync(TEntity entity);
 
@@ -26,5 +28,9 @@ namespace DL.Interfaces.Repositories.Abstractions
         Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
 
         Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
+
+        Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes);
+
+        Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate);
     } 
 }

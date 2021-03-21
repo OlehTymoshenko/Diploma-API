@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace PL.Diploma.API.Controllers
 {
     [ApiController]
-    public class BaseController : ControllerBase
+    public class DiplomaApiControllerBase : ControllerBase
     {
 
     }

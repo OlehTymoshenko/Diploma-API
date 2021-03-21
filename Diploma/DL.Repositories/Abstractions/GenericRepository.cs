@@ -7,6 +7,7 @@ using DL.EF.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Linq;
+using DL.Entities;
 
 namespace DL.Repositories.Abstractions
 {
@@ -19,24 +20,32 @@ namespace DL.Repositories.Abstractions
             _appDbContext = appDbContext;
         }
 
-        public async Task<TEntity> GetByIdAsync(int id)
+        public Task<TEntity> GetByIdAsync(int id)
         {
-            return await _appDbContext.Set<TEntity>().FindAsync(id);
+            return _appDbContext.Set<TEntity>().FindAsync(id).AsTask();
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        public async Task<IEnumerable<TEntity>> SelectAsync()
         {
             return await _appDbContext.Set<TEntity>().ToListAsync();
         }
 
-        public async Task AddAsync(TEntity entity)
+        public async Task<IEnumerable<TEntity>> SelectAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
         {
-            await _appDbContext.Set<TEntity>().AddAsync(entity);
+            var query = _appDbContext.Set<TEntity>().Where(predicate);
+            query = AddIncludesToQuery(query, includes);
+
+            return await query.ToListAsync();
         }
 
-        public async Task AddRangeAsync(IEnumerable<TEntity> entities)
+        public Task AddAsync(TEntity entity)
         {
-            await _appDbContext.Set<TEntity>().AddRangeAsync(entities);
+            return _appDbContext.Set<TEntity>().AddAsync(entity).AsTask();
+        }
+
+        public Task AddRangeAsync(IEnumerable<TEntity> entities)
+        {
+            return _appDbContext.Set<TEntity>().AddRangeAsync(entities);
         }
 
         public void Delete(TEntity entity)
@@ -64,6 +73,27 @@ namespace DL.Repositories.Abstractions
         public Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
         {
             return _appDbContext.Set<TEntity>().SingleOrDefaultAsync(predicate);
+        }
+
+        public Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
+        {
+            var query = _appDbContext.Set<TEntity>().AsQueryable();
+            query = AddIncludesToQuery(query, includes);
+
+            return query.SingleOrDefaultAsync(predicate);
+        }
+
+        public Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return _appDbContext.Set<TEntity>().CountAsync(predicate);
+        }
+
+
+        private static IQueryable<TEntity> AddIncludesToQuery(IQueryable<TEntity> query, params Expression<Func<TEntity, object>>[] includes)
+        {
+            includes?.ToList().ForEach(e => query = query.Include(e));
+
+            return query;
         }
     }
 }

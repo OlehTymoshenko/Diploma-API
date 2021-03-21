@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BL.Interfaces\BL.Interfaces.csproj" />
+    <ProjectReference Include="..\BL.Models\BL.Models.csproj" />
+    <ProjectReference Include="..\Common.Configurations\Common.Configurations.csproj" />
+    <ProjectReference Include="..\Common.Infrastructure\Common.Infrastructure.csproj" />
+    <ProjectReference Include="..\DL.Entities\DL.Entities.csproj" />
+    <ProjectReference Include="..\DL.Infrastructure\DL.Infrastructure.csproj" />
+    <ProjectReference Include="..\DL.Interfaces\DL.Interfaces.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -8,6 +8,7 @@ using DL.Interfaces.UnitOfWork;
 using DL.Interfaces.Repositories;
 using DL.Repositories;
 using Microsoft.Extensions.Configuration;
+using DL.EF.Migrations;
 
 namespace DL.DIExtesion
 {
@@ -18,7 +19,7 @@ namespace DL.DIExtesion
             services.AddDbContext<ApplicationDbContext>(opt =>
             {
                 opt.UseNpgsql(configuration.GetConnectionString("NpgsqlConnection"), 
-                    npgsqlOpt => npgsqlOpt.MigrationsAssembly("DL.EF.Migrations"));
+                    npgsqlOpt => npgsqlOpt.MigrationsAssembly(typeof(DummyProgram).Assembly.GetName().Name));
             });
 
             services.PerformMigration();

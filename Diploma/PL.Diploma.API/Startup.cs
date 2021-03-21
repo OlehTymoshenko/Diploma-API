@@ -13,8 +13,11 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using PL.Utils.Swagger;
+using PL.Utils.Auth;
 using Common.Configurations;
 using DL.DIExtesion;
+using BL.DIExtension;
+using PL.Utils.ExceptionsHandler;
 
 namespace PL.Diploma.API
 {
@@ -33,18 +36,18 @@ namespace PL.Diploma.API
             services.AddAppConfigurationSections(Configuration);
 
             services.AddDataLayer(Configuration);
+            services.AddBusinessLayer();
             
             services.AddCors();
             
             services.AddControllers();
 
+            services.AddCustomAuthentication(Configuration);
+            services.AddCustomAuthorization();
 
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             services.AddSwaggerDocs(xmlPath);
-
-            
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,6 +69,8 @@ namespace PL.Diploma.API
             app.UseCors(builder => builder.AllowAnyOrigin().
                                            AllowAnyMethod().
                                            AllowAnyHeader());
+            
+            app.UseCustomExceptionsHandlerMiddleware();
 
             app.UseAuthentication();
             app.UseAuthorization();
