@@ -1,14 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using PL.Utils.Auth;
 using BL.Models.Auth;
 using BL.Interfaces.Subdomains.Auth;
-using System.Security.Claims;
 
 namespace PL.Diploma.API.Controllers
 {
@@ -21,9 +19,11 @@ namespace PL.Diploma.API.Controllers
     {
         readonly IAuthService _authService;
 
-        public IdentityController(IAuthService authService)
+        public IdentityController(IAuthService authService, IOptions<Common.Configurations.Sections.ConnectionStringsSection> options)
         {
             _authService = authService;
+
+            Console.WriteLine($"-----Connection string for postgre {options.Value.NpgsqlConnection}");
         }
 
         [AllowAnonymous]

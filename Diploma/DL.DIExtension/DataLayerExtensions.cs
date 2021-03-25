@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using Common.Configurations.Sections;
+using Common.Configurations.Hosting;
 using Microsoft.Extensions.Options;
 using DL.EF.Context;
 using DL.Interfaces.UnitOfWork;
@@ -18,7 +18,7 @@ namespace DL.DIExtesion
         {
             services.AddDbContext<ApplicationDbContext>(opt =>
             {
-                opt.UseNpgsql(configuration.GetConnectionString("NpgsqlConnection"), 
+                opt.UseNpgsql(new HostingService().GetPostgreSqlDbConnectionString(configuration), 
                     npgsqlOpt => npgsqlOpt.MigrationsAssembly(typeof(DummyProgram).Assembly.GetName().Name));
             });
 

@@ -58,10 +58,10 @@ namespace PL.Diploma.API
                 _logger.LogDebug("Configure development environment...");
 
                 app.UseDeveloperExceptionPage();
-
-                app.UseSwaggerDocs();
             }
 
+            app.UseSwaggerDocs(); // propably it shold be moved to upper block IsDevelopment
+            
             app.UseHttpsRedirection();
 
             app.UseRouting();
