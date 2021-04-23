@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DL.EF.Context;
+﻿using DL.EF.Context;
 using DL.Entities;
 using DL.Interfaces.Repositories;
 using DL.Repositories.Abstractions;

@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using DL.Entities.Base;
+using System.ComponentModel.DataAnnotations;
 
 namespace DL.Entities
 {
     public class User : BaseEntity
     {
+        [Required]
         public string Email { get; set; }
 
+        [Required]
+        [StringLength(50, MinimumLength = 6)]
         public string Password { get; set; }
 
+        [Required]
         public string FirstName { get; set; }
 
+        [Required]
         public string LastName { get; set; }
 
         public DateTime CreateDateTime { get; set; }

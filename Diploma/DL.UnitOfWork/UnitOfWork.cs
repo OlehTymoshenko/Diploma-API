@@ -14,21 +14,45 @@ namespace DL.UnitOfWork
             ApplicationDbContext applicationDbContext,
             IUsersRepository usersRepository,
             IRolesRepository rolesRepository,
-            IRefreshTokensRepository refreshTokensRepository)
+            IRefreshTokensRepository refreshTokensRepository,
+            IDegreeRepository degreeRepository,
+            IFileTypeRepository fileTypeRepository,
+            IGeneratedFileRepository generatedFileRepository,
+            IPublishingHouseRepository publishingHouseRepository,
+            IScientistRepository scientistRepository,
+            IUniversityDepartmentRepository universityDepartmentRepository)
         {
             _appDbContext = applicationDbContext;
             
             Users = usersRepository;
             Roles = rolesRepository;
             RefreshTokens = refreshTokensRepository;
+            Degrees = degreeRepository;
+            FileTypes = fileTypeRepository;
+            GeneratedFiles = generatedFileRepository;
+            PublishingHouses = publishingHouseRepository;
+            Scientists = scientistRepository;
+            UniversityDepartments = universityDepartmentRepository;
         }
 
 
-        public IUsersRepository Users { get; private set; }
+        public IUsersRepository Users { get; init; }
 
-        public IRolesRepository Roles { get; private set; }
+        public IRolesRepository Roles { get; init; }
 
-        public IRefreshTokensRepository RefreshTokens { get; private set; }
+        public IRefreshTokensRepository RefreshTokens { get; init; }
+
+        public IDegreeRepository Degrees { get; init; }
+
+        public IFileTypeRepository FileTypes { get; init; }
+
+        public IGeneratedFileRepository GeneratedFiles { get; init; }
+
+        public IPublishingHouseRepository PublishingHouses { get; init; }
+
+        public IScientistRepository Scientists { get; init; }
+
+        public IUniversityDepartmentRepository UniversityDepartments{ get; init; }
 
 
         public int SaveChanges()

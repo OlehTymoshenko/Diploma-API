@@ -1,8 +1,6 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Common.Configurations.Hosting;
-using Microsoft.Extensions.Options;
 using DL.EF.Context;
 using DL.Interfaces.UnitOfWork;
 using DL.Interfaces.Repositories;
@@ -29,6 +27,12 @@ namespace DL.DIExtesion
             services.AddScoped<IUsersRepository, UsersReporitory>();
             services.AddScoped<IRolesRepository, RolesRepository>();
             services.AddScoped<IRefreshTokensRepository, RefreshTokensRepository>();
+            services.AddScoped<IDegreeRepository, DegreRepository>();
+            services.AddScoped<IFileTypeRepository, FileTypeRepository>();
+            services.AddScoped<IGeneratedFileRepository, GeneratedFilesRepository>();
+            services.AddScoped<IPublishingHouseRepository, PublishingHouseRepository>();
+            services.AddScoped<IScientistRepository, ScientistRepository>();
+            services.AddScoped<IUniversityDepartmentRepository, UniversityDepartmentRepository>();
 
             return services;
         }
