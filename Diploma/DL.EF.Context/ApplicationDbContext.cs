@@ -25,7 +25,7 @@ namespace DL.EF.Context
 
         public DbSet<Scientist> Scientists { get; set; }
 
-        public DbSet<UniversityDepartment>  UniversityDepartments{ get; set; }
+        public DbSet<UniversityDepartment> UniversityDepartments { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

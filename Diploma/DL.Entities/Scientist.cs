@@ -14,6 +14,6 @@ namespace DL.Entities
 
         public string MiddleName { get; set; }
 
-        ICollection<Degree> Degrees { get; set; } = new List<Degree>();
+        public ICollection<Degree> Degrees { get; set; } = new List<Degree>();
     }
 }
