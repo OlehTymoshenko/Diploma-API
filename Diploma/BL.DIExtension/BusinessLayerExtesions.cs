@@ -1,12 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-using BL.Interfaces.Subdomains.Auth;
-using BL.Subdomains.Auth;
+using BL.Interfaces.Subdomains.Auth.Services;
+using BL.Interfaces.Subdomains.DataForFiles.Services;
+using BL.Subdomains.Auth.Services;
+using BL.Subdomains.DataForFiles.Services;
 using BL.Infrastructure.AutoMapperProfiles;
-using System.Linq;
 
 namespace BL.DIExtension
 {
@@ -22,7 +20,9 @@ namespace BL.DIExtension
             // Add services
             serviceCollection.AddScoped<ITokenService, TokenService>();
             serviceCollection.AddScoped<IAuthService, AuthService>();
-            
+            serviceCollection.AddScoped<IPublishingHouseService, PublishingHouseService>();
+            serviceCollection.AddScoped<IUniversityDepartmentService, UniversityDepartmentService>();
+
             return serviceCollection;
         }
     }

@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DL.EF.Migrations.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210424210201_AddEntitiesOfDomainArea")]
-    partial class AddEntitiesOfDomainArea
+    [Migration("20210425200513_AddDomainAreaEntities")]
+    partial class AddDomainAreaEntities
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -110,6 +110,13 @@ namespace DL.EF.Migrations.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PublishingHouses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Name = "видавництво Національного аерокосмічного університету ім. М. Є. Жуковського \"ХАІ\""
+                        });
                 });
 
             modelBuilder.Entity("DL.Entities.RefreshToken", b =>

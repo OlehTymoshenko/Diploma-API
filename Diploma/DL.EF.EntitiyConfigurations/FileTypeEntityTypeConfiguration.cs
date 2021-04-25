@@ -8,11 +8,11 @@ namespace DL.EF.EntitiyConfigurations
 {
     public class FileTypeEntityTypeConfiguration : IEntityTypeConfiguration<FileType>
     {
-        readonly List<FileType> fileTypes;
+        readonly List<FileType> _fileTypes;
 
         public FileTypeEntityTypeConfiguration()
         {
-            fileTypes = new()
+            _fileTypes = new()
             {
                 new() { Id = 1, Type = AvailableFileTypes.NoteOfAuthors },
                 new() { Id = 2, Type = AvailableFileTypes.ExpertCommissionAct },
@@ -22,7 +22,7 @@ namespace DL.EF.EntitiyConfigurations
 
         public void Configure(EntityTypeBuilder<FileType> builder)
         {
-            builder.HasData(fileTypes);
+            builder.HasData(_fileTypes);
         }
     }
 }

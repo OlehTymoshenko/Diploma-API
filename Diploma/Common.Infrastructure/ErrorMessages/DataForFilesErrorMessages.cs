@@ -1,11 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Common.Infrastructure.Exceptions
+﻿namespace Common.Infrastructure.ErrorMessages
 {
-    public class ErrorMessages
+    public class DataForFilesErrorMessages
     {
+        #region Errors messages
+
+        public const string ObjectWasNotFoundDuringUpdate = "The passed object was not found on updating";
+
+        public const string ObjectWithIdWasNotFoundDuringDelete = "A object with the passed Id was not found on deleting";
+
+        #endregion
+
+        /*#region Publishing house errors messages
+
         public const string InvalidCredentials = "Invalid credintials";
 
         public const string RefreshTokensNotExists = "Refresh tokens for the provided credentials don't exist";
@@ -17,5 +23,8 @@ namespace Common.Infrastructure.Exceptions
         public const string InvalidAccessToken = "Invalid access token";
 
         public const string InvalidRefreshToken = "Invalid refresh token";
+
+        #endregion */
+
     }
 }

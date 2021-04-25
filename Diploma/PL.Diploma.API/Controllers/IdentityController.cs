@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using PL.Utils.Auth;
 using BL.Models.Auth;
-using BL.Interfaces.Subdomains.Auth;
+using BL.Interfaces.Subdomains.Auth.Services;
+using PL.Utils.Auth;
+using Common.Configurations.Sections;
 
 namespace PL.Diploma.API.Controllers
 {
@@ -19,7 +20,7 @@ namespace PL.Diploma.API.Controllers
     {
         readonly IAuthService _authService;
 
-        public IdentityController(IAuthService authService, IOptions<Common.Configurations.Sections.ConnectionStringsSection> options)
+        public IdentityController(IAuthService authService, IOptions<ConnectionStringsSection> options)
         {
             _authService = authService;
 

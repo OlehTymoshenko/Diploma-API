@@ -34,6 +34,7 @@ namespace DL.EF.Context
 
             modelBuilder.ApplyConfiguration(new RoleEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new FileTypeEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new PublishingHouseEntityTypeConfiguration());
         }
     }
 }

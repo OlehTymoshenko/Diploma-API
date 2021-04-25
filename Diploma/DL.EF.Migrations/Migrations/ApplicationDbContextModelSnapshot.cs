@@ -108,6 +108,13 @@ namespace DL.EF.Migrations.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PublishingHouses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Name = "видавництво Національного аерокосмічного університету ім. М. Є. Жуковського \"ХАІ\""
+                        });
                 });
 
             modelBuilder.Entity("DL.Entities.RefreshToken", b =>

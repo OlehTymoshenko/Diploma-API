@@ -1,23 +1,27 @@
 ﻿using System;
+using System.Net;
 using System.Collections.Generic;
 using System.Security.Claims;
-using BL.Interfaces.Subdomains.Auth;
-using Common.Configurations.Sections;
-using Microsoft.Extensions.Options;
-using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using BL.Interfaces.Subdomains.Auth.Services;
+using Common.Configurations.Sections;
 using Common.Infrastructure.Exceptions;
-using System.Net;
+using Common.Infrastructure.ErrorMessages;
 
-namespace BL.Subdomains.Auth
+namespace BL.Subdomains.Auth.Services
 {
     public class TokenService : ITokenService
     {
         const string JWT_TOKEN_SIGNATURE_ALGORITHM = SecurityAlgorithms.HmacSha256;
         const int REFRESH_TOKEN_SIZE_IN_BYTES = 64;
+        readonly TimeSpan ACCESS_TOKEN_LIFETIME = TimeSpan.FromHours(1);
+
         readonly AppSettingsSection _appSettings;
+
 
         public TokenService(IOptions<AppSettingsSection> appSettingsOption)
         {
@@ -32,7 +36,7 @@ namespace BL.Subdomains.Auth
             var tokenDescription = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(2), //AddHours(1),
+                Expires = DateTime.UtcNow.Add(ACCESS_TOKEN_LIFETIME),
                 NotBefore = DateTime.UtcNow,
                 SigningCredentials = signinCredentials
             };
@@ -74,13 +78,13 @@ namespace BL.Subdomains.Auth
             }
             catch(Exception)
             {
-                throw new DiplomaApiExpection(ErrorMessages.InvalidAccessToken, HttpStatusCode.BadRequest);
+                throw new DiplomaApiExpection(AuthErrorMessages.InvalidAccessToken, HttpStatusCode.BadRequest);
             }
 
             if (securityToken is not JwtSecurityToken jwtSecurityToken ||
                 !jwtSecurityToken.SignatureAlgorithm.Equals(JWT_TOKEN_SIGNATURE_ALGORITHM, StringComparison.InvariantCultureIgnoreCase))
             {
-                throw new SecurityTokenDecryptionFailedException(ErrorMessages.InvalidAccessToken);
+                throw new SecurityTokenDecryptionFailedException(AuthErrorMessages.InvalidAccessToken);
             }
 
             return claimsPrincipal;

@@ -10,11 +10,11 @@ namespace DL.EF.EntitiyConfigurations
 {
     public class RoleEntityTypeConfiguration : IEntityTypeConfiguration<Role>
     {
-        readonly List<Role> roles;
+        readonly List<Role> _roles;
 
         public RoleEntityTypeConfiguration()
         {
-            roles = new List<Role>()
+            _roles = new List<Role>()
             {
                 new Role()
                 {
@@ -26,7 +26,7 @@ namespace DL.EF.EntitiyConfigurations
 
         public void Configure(EntityTypeBuilder<Role> builder)
         {
-            builder.HasData(roles);
+            builder.HasData(_roles);
         }
     }
 }

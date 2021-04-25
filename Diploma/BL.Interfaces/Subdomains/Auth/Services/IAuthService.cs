@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using BL.Models.Auth;
 
-namespace BL.Interfaces.Subdomains.Auth
+namespace BL.Interfaces.Subdomains.Auth.Services
 {
     public interface IAuthService
     {

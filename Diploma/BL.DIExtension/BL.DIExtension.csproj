@@ -12,7 +12,8 @@
   <ItemGroup>
     <ProjectReference Include="..\BL.Infrastructure\BL.Infrastructure.csproj" />
     <ProjectReference Include="..\BL.Interfaces\BL.Interfaces.csproj" />
-    <ProjectReference Include="..\BL.Subdomains.Auth\BL.Subdomains.Auth.csproj" />
+    <ProjectReference Include="..\BL.Subdomains.Auth\BL.Subdomains.Auth.Services.csproj" />
+    <ProjectReference Include="..\BL.Subdomains.DataForFiles.Services\BL.Subdomains.DataForFiles.Services.csproj" />
   </ItemGroup>
 
 </Project>

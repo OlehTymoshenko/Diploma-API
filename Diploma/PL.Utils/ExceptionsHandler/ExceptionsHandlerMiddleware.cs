@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Threading.Tasks;
 using PL.Utils.ExceptionsHandler.Models;
-using Microsoft.IdentityModel.Tokens;
 
 namespace PL.Utils.ExceptionsHandler
 {

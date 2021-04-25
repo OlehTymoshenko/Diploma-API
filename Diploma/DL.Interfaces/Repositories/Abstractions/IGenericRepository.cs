@@ -9,7 +9,7 @@ namespace DL.Interfaces.Repositories.Abstractions
 {
     public interface IGenericRepository<TEntity> where TEntity : class, IBaseEntity
     {
-        Task<TEntity> GetByIdAsync(int id);
+        Task<TEntity> GetByIdAsync(long id);
 
         Task<IEnumerable<TEntity>> SelectAsync();
         
@@ -19,11 +19,11 @@ namespace DL.Interfaces.Repositories.Abstractions
 
         Task AddRangeAsync(IEnumerable<TEntity> entities);
 
-        void Delete(TEntity entity);
+        TEntity Delete(TEntity entity);
 
         void DeleteRange(IEnumerable<TEntity> entities);
 
-        void Update(TEntity entity);
+        TEntity Update(TEntity entity);
 
         Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
 

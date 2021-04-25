@@ -1,23 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using PL.Utils.Swagger;
-using PL.Utils.Auth;
-using Common.Configurations;
 using DL.DIExtesion;
 using BL.DIExtension;
+using PL.Utils.Swagger;
+using PL.Utils.Auth;
 using PL.Utils.ExceptionsHandler;
+using Common.Configurations;
 
 namespace PL.Diploma.API
 {
@@ -45,9 +37,7 @@ namespace PL.Diploma.API
             services.AddCustomAuthentication(Configuration);
             services.AddCustomAuthorization();
 
-            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-            services.AddSwaggerDocs(xmlPath);
+            services.AddSwaggerDocs();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,8 +50,8 @@ namespace PL.Diploma.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseSwaggerDocs(); // propably it shold be moved to upper block IsDevelopment
-            
+            app.UseSwaggerDocs(); // propably in real production env it shold be moved to upper block
+
             app.UseHttpsRedirection();
 
             app.UseRouting();

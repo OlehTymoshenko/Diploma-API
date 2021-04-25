@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DL.EF.Migrations.Migrations
 {
-    public partial class AddEntitiesOfDomainArea : Migration
+    public partial class AddDomainAreaEntities : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -172,6 +172,11 @@ namespace DL.EF.Migrations.Migrations
                     { 2L, 1 },
                     { 3L, 2 }
                 });
+
+            migrationBuilder.InsertData(
+                table: "PublishingHouses",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 1L, "видавництво Національного аерокосмічного університету ім. М. Є. Жуковського \"ХАІ\"" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_DegreeScientist_ScientistsId",

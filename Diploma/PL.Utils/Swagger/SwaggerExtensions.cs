@@ -3,13 +3,18 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System;
+using System.IO;
+using System.Reflection;
 
 namespace PL.Utils.Swagger
 {
     public static class SwaggerExtensions
     {
-        public static IServiceCollection AddSwaggerDocs(this IServiceCollection services, string xmlPath)
+        public static IServiceCollection AddSwaggerDocs(this IServiceCollection services)
         {
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v0.1", new OpenApiInfo

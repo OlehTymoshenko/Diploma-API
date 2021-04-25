@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Net;
 using System.Threading.Tasks;
-using BL.Interfaces.Subdomains.Auth;
-using BL.Models.Auth;
-using Common.Configurations.Sections;
-using Microsoft.Extensions.Options;
 using System.Security.Claims;
+using Microsoft.Extensions.Options;
 using AutoMapper;
 using DL.Entities;
-using Common.Infrastructure.Exceptions;
 using DL.Interfaces.UnitOfWork;
 using DL.Infrastructure.Roles;
+using BL.Models.Auth;
+using BL.Interfaces.Subdomains.Auth.Services;
+using Common.Infrastructure.Exceptions;
+using Common.Infrastructure.ErrorMessages;
+using Common.Configurations.Sections;
 
-namespace BL.Subdomains.Auth
+namespace BL.Subdomains.Auth.Services
 {
     public class AuthService : IAuthService
     {
@@ -48,7 +48,7 @@ namespace BL.Subdomains.Auth
 
             if (user == null)
             {
-                throw new DiplomaApiExpection(ErrorMessages.InvalidCredentials, HttpStatusCode.Unauthorized);
+                throw new DiplomaApiExpection(AuthErrorMessages.InvalidCredentials, HttpStatusCode.Unauthorized);
             }
 
             var tokensPair = await GenerateTokensPairAsync(user);
@@ -68,7 +68,7 @@ namespace BL.Subdomains.Auth
 
             if(!isEmailNew)
             {
-                throw new DiplomaApiExpection(ErrorMessages.EmailAlreadyExistsInDB, HttpStatusCode.BadRequest);
+                throw new DiplomaApiExpection(AuthErrorMessages.EmailAlreadyExistsInDB, HttpStatusCode.BadRequest);
             }
 
             // Creation new User entity
@@ -104,7 +104,7 @@ namespace BL.Subdomains.Auth
             var oldRefreshToken = await _unitOfWork.RefreshTokens.SingleOrDefaultAsync(t => t.Token == refreshTokensModel.RefreshToken);
             if (oldRefreshToken == null)
             {
-                throw new DiplomaApiExpection(ErrorMessages.InvalidRefreshToken, HttpStatusCode.BadRequest);
+                throw new DiplomaApiExpection(AuthErrorMessages.InvalidRefreshToken, HttpStatusCode.BadRequest);
             }
             
             _unitOfWork.RefreshTokens.Delete(oldRefreshToken);
@@ -121,14 +121,14 @@ namespace BL.Subdomains.Auth
 
             if(user == null)
             {
-                throw new DiplomaApiExpection(ErrorMessages.UserWithProvidedEmailDoesntExists, HttpStatusCode.Gone);
+                throw new DiplomaApiExpection(AuthErrorMessages.UserWithProvidedEmailDoesntExists, HttpStatusCode.Gone);
             }
 
             var tokens = await _unitOfWork.RefreshTokens.SelectAsync(t => t.UserId == user.Id);
 
             if(tokens == null)
             {
-                 throw new DiplomaApiExpection(ErrorMessages.RefreshTokensNotExists, HttpStatusCode.BadRequest);
+                 throw new DiplomaApiExpection(AuthErrorMessages.RefreshTokensNotExists, HttpStatusCode.BadRequest);
             }
 
             _unitOfWork.RefreshTokens.DeleteRange(tokens);

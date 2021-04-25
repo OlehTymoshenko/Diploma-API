@@ -14,13 +14,13 @@ namespace DL.Repositories.Abstractions
     public abstract class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class, IBaseEntity
     {
         private readonly ApplicationDbContext _appDbContext;
-            
+
         public GenericRepository(ApplicationDbContext appDbContext)
         {
             _appDbContext = appDbContext;
         }
 
-        public Task<TEntity> GetByIdAsync(int id)
+        public Task<TEntity> GetByIdAsync(long id)
         {
             return _appDbContext.Set<TEntity>().FindAsync(id).AsTask();
         }
@@ -48,17 +48,15 @@ namespace DL.Repositories.Abstractions
             return _appDbContext.Set<TEntity>().AddRangeAsync(entities);
         }
 
-        public void Delete(TEntity entity)
+        public TEntity Update(TEntity entity)
         {
-            _appDbContext.Set<TEntity>().Remove(entity);
+            return _appDbContext.Set<TEntity>().Update(entity).Entity;
         }
 
-
-        public void Update(TEntity entity)
+        public TEntity Delete(TEntity entity)
         {
-             _appDbContext.Set<TEntity>().Update(entity);
+            return _appDbContext.Set<TEntity>().Remove(entity).Entity;
         }
-
 
         public void DeleteRange(IEnumerable<TEntity> entities)
         {
