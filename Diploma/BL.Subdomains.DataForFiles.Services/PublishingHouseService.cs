@@ -48,7 +48,7 @@ namespace BL.Subdomains.DataForFiles.Services
             var publishingHouse = await _unitOfWork.PublishingHouses.GetByIdAsync(publishingHouseModel.Id);
 
             if (publishingHouse == null)
-                throw new DiplomaApiExpection(DataForFilesErrorMessages.ObjectWasNotFoundDuringUpdate, HttpStatusCode.NotFound);
+                throw new DiplomaApiExpection(DataForFilesErrorMessages.ObjectWasNotFoundOnUpdate, HttpStatusCode.NotFound);
 
             publishingHouse.Name = publishingHouseModel.Name;
 
@@ -64,7 +64,7 @@ namespace BL.Subdomains.DataForFiles.Services
             var publishingHouse = await _unitOfWork.PublishingHouses.GetByIdAsync(id);
 
             if (publishingHouse == null)
-                throw new DiplomaApiExpection(DataForFilesErrorMessages.ObjectWithIdWasNotFoundDuringDelete, HttpStatusCode.NotFound);
+                throw new DiplomaApiExpection(DataForFilesErrorMessages.ObjectWithIdWasNotFoundOnDelete, HttpStatusCode.NotFound);
 
             _unitOfWork.PublishingHouses.Delete(publishingHouse);
 

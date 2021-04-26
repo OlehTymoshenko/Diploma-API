@@ -12,7 +12,7 @@ namespace PL.Utils.Swagger
     {
         public static IServiceCollection AddSwaggerDocs(this IServiceCollection services)
         {
-            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlFile = $"{Assembly.GetEntryAssembly().GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 
             services.AddSwaggerGen(options =>

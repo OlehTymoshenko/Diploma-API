@@ -10,6 +10,9 @@ using PL.Utils.Swagger;
 using PL.Utils.Auth;
 using PL.Utils.ExceptionsHandler;
 using Common.Configurations;
+using System.Reflection;
+using System.IO;
+using System;
 
 namespace PL.Diploma.API
 {

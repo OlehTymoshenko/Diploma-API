@@ -6,7 +6,7 @@
 
         public const string RefreshTokensNotExists = "Refresh tokens for the provided credentials don't exist";
 
-        public const string EmailAlreadyExistsInDB = "Email is already registred";
+        public const string EmailAlreadyExistsInDB = "The email is already registered";
 
         public const string UserWithProvidedEmailDoesntExists = "User with provided email doesn't exists in the DB";
 

@@ -12,7 +12,9 @@ namespace DL.Interfaces.Repositories.Abstractions
         Task<TEntity> GetByIdAsync(long id);
 
         Task<IEnumerable<TEntity>> SelectAsync();
-        
+
+        Task<IEnumerable<TEntity>> SelectAsync(params Expression<Func<TEntity, object>>[] includes);
+
         Task<IEnumerable<TEntity>> SelectAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes);
 
         Task AddAsync(TEntity entity);

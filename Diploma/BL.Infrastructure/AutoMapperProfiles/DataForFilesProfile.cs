@@ -16,6 +16,13 @@ namespace BL.Infrastructure.AutoMapperProfiles
             CreateMap<UniversityDepartmentModel, UniversityDepartment>();
             CreateMap<SaveUniversityDepartmentModel, UniversityDepartment>();
 
+            CreateMap<DegreeModel, Degree>();
+            CreateMap<SaveDegreeModel, Degree>();
+
+            CreateMap<ScientistModel, Scientist>();
+            CreateMap<SaveScientistModel, Scientist>().
+                ForMember(d => d.Degrees, opt => opt.Ignore());
+
             #endregion
 
             #region Entity to model
@@ -23,6 +30,10 @@ namespace BL.Infrastructure.AutoMapperProfiles
             CreateMap<PublishingHouse, PublishingHouseModel>();
 
             CreateMap<UniversityDepartment, UniversityDepartmentModel>();
+
+            CreateMap<Degree, DegreeModel>();
+
+            CreateMap<Scientist, ScientistModel>();
 
             #endregion
         }

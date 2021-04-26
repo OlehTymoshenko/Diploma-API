@@ -30,6 +30,14 @@ namespace DL.Repositories.Abstractions
             return await _appDbContext.Set<TEntity>().ToListAsync();
         }
 
+        public async Task<IEnumerable<TEntity>> SelectAsync(params Expression<Func<TEntity, object>>[] includes)
+        {
+            var query = _appDbContext.Set<TEntity>().AsQueryable();
+            query = AddIncludesToQuery(query, includes);
+
+            return await query.ToListAsync();
+        }
+
         public async Task<IEnumerable<TEntity>> SelectAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
         {
             var query = _appDbContext.Set<TEntity>().Where(predicate);

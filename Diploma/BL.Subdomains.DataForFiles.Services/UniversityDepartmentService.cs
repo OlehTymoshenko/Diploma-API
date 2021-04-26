@@ -48,7 +48,7 @@ namespace BL.Subdomains.DataForFiles.Services
             var universityDepartment = await _unitOfWork.UniversityDepartments.GetByIdAsync(universityDepartmentModel.Id);
 
             if (universityDepartment == null)
-                throw new DiplomaApiExpection(DataForFilesErrorMessages.ObjectWasNotFoundDuringUpdate, HttpStatusCode.NotFound);
+                throw new DiplomaApiExpection(DataForFilesErrorMessages.ObjectWasNotFoundOnUpdate, HttpStatusCode.NotFound);
 
             universityDepartment.FullName = universityDepartmentModel.FullName;
             universityDepartment.ShortName = universityDepartmentModel.ShortName;
@@ -65,7 +65,7 @@ namespace BL.Subdomains.DataForFiles.Services
             var universityDepartment = await _unitOfWork.UniversityDepartments.GetByIdAsync(id);
 
             if (universityDepartment == null)
-                throw new DiplomaApiExpection(DataForFilesErrorMessages.ObjectWithIdWasNotFoundDuringDelete, HttpStatusCode.NotFound);
+                throw new DiplomaApiExpection(DataForFilesErrorMessages.ObjectWithIdWasNotFoundOnDelete, HttpStatusCode.NotFound);
 
             _unitOfWork.UniversityDepartments.Delete(universityDepartment);
 

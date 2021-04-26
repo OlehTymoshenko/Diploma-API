@@ -22,6 +22,9 @@ namespace BL.DIExtension
             serviceCollection.AddScoped<IAuthService, AuthService>();
             serviceCollection.AddScoped<IPublishingHouseService, PublishingHouseService>();
             serviceCollection.AddScoped<IUniversityDepartmentService, UniversityDepartmentService>();
+            serviceCollection.AddScoped<IDegreeService, DegreeService>();
+            serviceCollection.AddScoped<IScientistService, ScientistService>();
+
 
             return serviceCollection;
         }
