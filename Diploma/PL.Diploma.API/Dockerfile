@@ -3,7 +3,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim AS base
 WORKDIR /app
 ENV ASPNETCORE_ENVIRONMENT="Production"
-ENV HOSTING="heroku"
+ENV HOSTING="Heroku"
 EXPOSE 80
 EXPOSE 443
 
@@ -14,8 +14,9 @@ COPY ["PL.Utils/PL.Utils.csproj", "PL.Utils/"]
 COPY ["BL.Interfaces/BL.Interfaces.csproj", "BL.Interfaces/"]
 COPY ["BL.Models/BL.Models.csproj", "BL.Models/"]
 COPY ["BL.DIExtension/BL.DIExtension.csproj", "BL.DIExtension/"]
+COPY ["BL.Subdomains.Auth/BL.Subdomains.Auth.Services.csproj", "BL.Subdomains.Auth/"]
+COPY ["BL.Subdomains.DataForFiles.Services/BL.Subdomains.DataForFiles.Services.csproj", "BL.Subdomains.DataForFiles.Services/"]
 COPY ["BL.Infrastructure/BL.Infrastructure.csproj", "BL.Infrastructure/"]
-COPY ["BL.Subdomains.Auth/BL.Subdomains.Auth.csproj", "BL.Subdomains.Auth/"]
 COPY ["DL.DIExtension/DL.DIExtension.csproj", "DL.DIExtension/"]
 COPY ["DL.EF.Context/DL.EF.Context.csproj", "DL.EF.Context/"]
 COPY ["DL.Entities/DL.Entities.csproj", "DL.Entities/"]
