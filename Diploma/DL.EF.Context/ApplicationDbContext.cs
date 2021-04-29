@@ -17,8 +17,6 @@ namespace DL.EF.Context
 
         public DbSet<Degree> Degrees { get; set; }
 
-        public DbSet<FileType> FileTypes { get; set; }
-
         public DbSet<GeneratedFile> GeneratedFiles { get; set; }
 
         public DbSet<PublishingHouse> PublishingHouses { get; set; }
@@ -33,7 +31,6 @@ namespace DL.EF.Context
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new RoleEntityTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new FileTypeEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new PublishingHouseEntityTypeConfiguration());
         }
     }

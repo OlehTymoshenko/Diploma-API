@@ -28,7 +28,6 @@ namespace DL.DIExtesion
             services.AddScoped<IRolesRepository, RolesRepository>();
             services.AddScoped<IRefreshTokensRepository, RefreshTokensRepository>();
             services.AddScoped<IDegreeRepository, DegreRepository>();
-            services.AddScoped<IFileTypeRepository, FileTypeRepository>();
             services.AddScoped<IGeneratedFileRepository, GeneratedFilesRepository>();
             services.AddScoped<IPublishingHouseRepository, PublishingHouseRepository>();
             services.AddScoped<IScientistRepository, ScientistRepository>();

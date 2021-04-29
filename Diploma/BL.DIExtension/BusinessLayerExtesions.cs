@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using BL.Interfaces.Subdomains.Auth.Services;
 using BL.Interfaces.Subdomains.DataForFiles.Services;
 using BL.Subdomains.Auth.Services;

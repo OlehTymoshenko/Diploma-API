@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BL.Models\BL.Models.csproj" />
+    <ProjectReference Include="..\DL.Entities\DL.Entities.csproj" />
   </ItemGroup>
 
 </Project>

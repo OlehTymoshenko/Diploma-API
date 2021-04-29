@@ -16,8 +16,6 @@ namespace DL.Interfaces.UnitOfWork
 
         public IDegreeRepository Degrees { get; init; }
 
-        public IFileTypeRepository FileTypes { get; init; }
-
         public IGeneratedFileRepository GeneratedFiles { get; init; }
 
         public IPublishingHouseRepository PublishingHouses { get; init; }

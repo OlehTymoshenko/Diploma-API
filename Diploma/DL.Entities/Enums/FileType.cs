@@ -1,6 +1,6 @@
 ﻿namespace DL.Entities.Enums
 {
-    public enum AvailableFileTypes
+    public enum FileType
     {
         NoteOfAuthors,
         ExpertCommissionAct,

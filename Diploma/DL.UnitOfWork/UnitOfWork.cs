@@ -16,7 +16,6 @@ namespace DL.UnitOfWork
             IRolesRepository rolesRepository,
             IRefreshTokensRepository refreshTokensRepository,
             IDegreeRepository degreeRepository,
-            IFileTypeRepository fileTypeRepository,
             IGeneratedFileRepository generatedFileRepository,
             IPublishingHouseRepository publishingHouseRepository,
             IScientistRepository scientistRepository,
@@ -28,7 +27,6 @@ namespace DL.UnitOfWork
             Roles = rolesRepository;
             RefreshTokens = refreshTokensRepository;
             Degrees = degreeRepository;
-            FileTypes = fileTypeRepository;
             GeneratedFiles = generatedFileRepository;
             PublishingHouses = publishingHouseRepository;
             Scientists = scientistRepository;
@@ -43,8 +41,6 @@ namespace DL.UnitOfWork
         public IRefreshTokensRepository RefreshTokens { get; init; }
 
         public IDegreeRepository Degrees { get; init; }
-
-        public IFileTypeRepository FileTypes { get; init; }
 
         public IGeneratedFileRepository GeneratedFiles { get; init; }
 
