@@ -140,7 +140,7 @@ namespace BL.Subdomains.Auth.Services
         {
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.Email, user.Email), 
             };
 
             claims.AddRange(

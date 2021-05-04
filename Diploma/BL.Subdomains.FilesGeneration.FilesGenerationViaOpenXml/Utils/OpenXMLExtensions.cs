@@ -1,10 +1,13 @@
-﻿using DocumentFormat.OpenXml.Packaging;
+﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 using OpenXmlPowerTools;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils
 {
-    internal static class WordprocessingDocumentExtensions
+    internal static class OpenXMLExtensions
     {
         internal static WordprocessingDocument ReplaceText(this WordprocessingDocument wpd, string oldValue, string newValue, bool matchCase)
         {
@@ -21,6 +24,11 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils
             }
 
             return wpd;
+        }
+
+        internal static T FindNodeWhichContainsText<T>(this Body body, string nodeInnerText) where T : OpenXmlElement
+        {
+            return body.ChildElements.FirstOrDefault(e => e.InnerText.Contains(nodeInnerText)) as T;
         }
 
 

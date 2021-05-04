@@ -25,5 +25,7 @@ namespace DL.Entities
         public ICollection<Role> Roles { get; set; } = new List<Role>();
 
         public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
+
+        public ICollection<GeneratedFile> GeneratedFiles { get; set; } = new List<GeneratedFile>();
     }
 }

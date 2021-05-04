@@ -1,5 +1,4 @@
-﻿using BL.Interfaces.Subdomains.FilesGeneration;
-using DL.Entities.Enums;
+﻿using DL.Entities.Enums;
 
 namespace BL.Interfaces.Subdomains.FilesGeneration
 {

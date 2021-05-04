@@ -1,7 +1,7 @@
-﻿using DL.Entities.Base;
-using DL.Entities.Enums;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using DL.Entities.Base;
+using DL.Entities.Enums;
 
 namespace DL.Entities
 {
@@ -18,5 +18,10 @@ namespace DL.Entities
 
         [Required, DataType(DataType.DateTime)]
         public DateTime CreationDate { get; set; }
+
+        [Required]
+        public User User { get; set; }
+
+        public long UserId { get; set; }
     }
 }

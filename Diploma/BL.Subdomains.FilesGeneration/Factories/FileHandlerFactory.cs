@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using BL.Interfaces.Subdomains.FilesGeneration;
 using DL.Entities.Enums;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace BL.Subdomains.FilesGeneration
 {

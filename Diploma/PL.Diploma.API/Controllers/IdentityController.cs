@@ -49,7 +49,7 @@ namespace PL.Diploma.API.Controllers
         public async Task<ActionResult> Logout()
         {
             await _authService.LogoutAsync(HttpContext.User.Claims);
-
+            
             return Ok();
         }
 

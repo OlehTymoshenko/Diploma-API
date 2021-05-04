@@ -17,6 +17,8 @@ namespace BL.Models.FilesGeneration
 
         public DateTime PublishingDate { get; set; }
 
+        public string UniversityDepartmentName { get; set; }
+
         public string FullNameOfChiefOfUniversityDepartment { get; set; }
     }
 }

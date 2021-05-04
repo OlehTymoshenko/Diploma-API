@@ -25,9 +25,10 @@ namespace PL.Diploma.API.Controllers
         [HttpPost("generate-notes-of-authors")]
         public async Task<ActionResult> GenerateNoteOfAuthors(SaveNoteOfAuthorsModel saveNoteOfAuthorsModel)
         {
-            var createdFile = await _filesGenerationService.CreateNotesOfAuthorsFileAsync(saveNoteOfAuthorsModel);
+            var createdFile = await _filesGenerationService.CreateNotesOfAuthorsFileAsync(saveNoteOfAuthorsModel, 
+                HttpContext.User.Claims);
 
-            return File(createdFile.FileAsBytes, createdFile.MIMEType, "testname.docx");
+            return File(createdFile.FileAsBytes, createdFile.MIMEType, createdFile.FileName);
         }
     }
 }
