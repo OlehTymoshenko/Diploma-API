@@ -1,11 +1,10 @@
-﻿using System.Threading.Tasks;
-using DL.Entities.Enums;
-using BL.Models.FilesPreparation;
+﻿using BL.Models.FilesGeneration;
+using System.Threading.Tasks;
 
-namespace BL.Interfaces.Subdomains.FilesGeneration.Services
+namespace BL.Interfaces.Subdomains.FilesGeneration
 {
     public interface IFilesGenerationService
     {
-        Task<GeneratedFile> CreateFile(FileType fileType);
+        Task<CreatedFileModel> CreateNotesOfAuthorsFileAsync(SaveNoteOfAuthorsModel saveNoteOfAuthorsModel);
     } 
 }

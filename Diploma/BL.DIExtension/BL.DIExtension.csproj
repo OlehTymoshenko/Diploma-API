@@ -14,6 +14,7 @@
     <ProjectReference Include="..\BL.Interfaces\BL.Interfaces.csproj" />
     <ProjectReference Include="..\BL.Subdomains.Auth\BL.Subdomains.Auth.csproj" />
     <ProjectReference Include="..\BL.Subdomains.DataForFiles\BL.Subdomains.DataForFiles.csproj" />
+    <ProjectReference Include="..\BL.Subdomains.FilesGeneration\BL.Subdomains.FilesGeneration.csproj" />
   </ItemGroup>
 
 </Project>

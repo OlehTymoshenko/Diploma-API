@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BL.Models\BL.Models.csproj" />
+    <ProjectReference Include="..\BL.Utils\BL.Utils.csproj" />
     <ProjectReference Include="..\DL.Entities\DL.Entities.csproj" />
   </ItemGroup>
 

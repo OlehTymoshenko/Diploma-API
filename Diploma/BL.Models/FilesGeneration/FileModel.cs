@@ -1,13 +1,13 @@
 ﻿using DL.Entities.Enums;
 
-namespace BL.Interfaces.Subdomains.FilesGeneration
+namespace BL.Models.FilesGeneration
 {
-    public interface IFile
+    public class FileModel
     {
         public FileType Type { get; set; }
 
         public FileFormat Format { get; set; }
 
-        byte[] GetBytes();
+        public byte[] FileAsBytes { get; set; }
     }
 }

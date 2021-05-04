@@ -5,7 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BL.Interfaces\BL.Interfaces.csproj" />
+    <ProjectReference Include="..\BL.Subdomains.FilesGeneration.FilesGenerationViaOpenXml\BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.csproj" />
   </ItemGroup>
 
 </Project>

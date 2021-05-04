@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.12.3" />
+    <PackageReference Include="OpenXmlPowerTools-NetStandard" Version="4.4.21" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BL.Interfaces\BL.Interfaces.csproj" />
+    <ProjectReference Include="..\BL.Utils\BL.Utils.csproj" />
+    <ProjectReference Include="..\DL.Entities\DL.Entities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Templates\NotesOfAuthors.docx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Paragph_FullNameSignatureDate.docx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -1,8 +1,8 @@
-﻿using DL.EF.Context;
+﻿using System.IO;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
-using System.IO;
+using DL.EF.Context;
 
 
 namespace DL.EF.Migrations
