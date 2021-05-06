@@ -35,7 +35,7 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils
         }
 
 
-        internal async Task<List<OpenXmlElement>> GetFullNameSignatureDatePartialTemplateAsync(string personfullName, DateTime? date = default)
+        internal async Task<List<OpenXmlElement>> GetFullNameSignatureDatePartialTemplateAsync(string personFullName, DateTime? date = default)
         {
             // Load partial template from file
             using var memStream = await _templateLoader.LoadTemplateAsync(TEMPLATE_IN_FILE_OF_FULL_NAME_SIGNATURE_DATE_PARTIAL_TEMPLATE);
@@ -43,6 +43,7 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils
 
             // replacements for partial template
             var dictForReplace = GetReplacementsForDate(date);
+            dictForReplace.Add(NAME_OF_PLACEHOLDER_FOR_FULL_NAME_IN_PARTIAL_TEMPLATE, personFullName);
 
             wordDoc.ReplaceText(dictForReplace, false);
 

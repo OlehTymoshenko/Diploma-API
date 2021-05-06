@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BL.Interfaces\BL.Interfaces.csproj" />
     <ProjectReference Include="..\BL.Subdomains.FilesGeneration.FilesGenerationViaOpenXml\BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.csproj" />
+    <ProjectReference Include="..\Common.Infrastructure\Common.Infrastructure.csproj" />
     <ProjectReference Include="..\DL.Interfaces\DL.Interfaces.csproj" />
   </ItemGroup>
 

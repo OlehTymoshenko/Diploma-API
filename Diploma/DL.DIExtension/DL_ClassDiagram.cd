@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DL.Repositories.Abstractions.GenericRepository&lt;TEntity&gt;">
+    <Position X="8" Y="5.25" Width="2.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DL.Repositories.DegreRepository">
+    <Position X="7" Y="9" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DL.Repositories.GeneratedFilesRepository">
+    <Position X="14" Y="9" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DL.Repositories.PublishingHouseRepository">
+    <Position X="2.75" Y="9" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DL.Repositories.RefreshTokensRepository">
+    <Position X="9" Y="9" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DL.Repositories.RolesRepository">
+    <Position X="16.25" Y="9" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DL.Repositories.ScientistRepository">
+    <Position X="5" Y="9" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DL.Repositories.UniversityDepartmentRepository">
+    <Position X="11.25" Y="9" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DL.Repositories.UsersReporitory">
+    <Position X="18" Y="9" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DL.UnitOfWork.UnitOfWork">
+    <Position X="17.25" Y="4.5" Width="2" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DL.EF.Context.ApplicationDbContext">
+    <Position X="8" Y="10.75" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DL.EF.EntitiyConfigurations.PublishingHouseEntityTypeConfiguration">
+    <Position X="11" Y="10.75" Width="3" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DL.EF.EntitiyConfigurations.RoleEntityTypeConfiguration">
+    <Position X="11" Y="12.25" Width="2.5" />
+    <TypeIdentifier />
+  </Class>
+  <Interface Name="DL.Interfaces.Repositories.Abstractions.IGenericRepository&lt;TEntity&gt;">
+    <Position X="8" Y="0.5" Width="2.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="DL.Interfaces.Repositories.IDegreeRepository">
+    <Position X="6.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="DL.Interfaces.Repositories.IGeneratedFileRepository">
+    <Position X="9.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="DL.Interfaces.Repositories.IPublishingHouseRepository">
+    <Position X="13.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="DL.Interfaces.Repositories.IRefreshTokensRepository">
+    <Position X="2.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="DL.Interfaces.Repositories.IRolesRepository">
+    <Position X="8" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="DL.Interfaces.Repositories.IScientistRepository">
+    <Position X="11.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="DL.Interfaces.Repositories.IUniversityDepartmentRepository">
+    <Position X="15" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="DL.Interfaces.Repositories.IUsersRepository">
+    <Position X="4.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="DL.Interfaces.UnitOfWork.IUnitOfWork">
+    <Position X="17.25" Y="0.5" Width="2" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

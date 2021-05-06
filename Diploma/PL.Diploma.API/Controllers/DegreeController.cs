@@ -4,13 +4,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BL.Interfaces.Subdomains.DataForFiles.Services;
 using BL.Models.DataForFiles;
+using Microsoft.AspNetCore.Authorization;
+using PL.Utils.Auth;
 
 namespace PL.Diploma.API.Controllers
 {
 
     [Consumes("application/json")]
     [Produces("application/json")]
-    //[Authorize(Policies.Client)]
+    [Authorize(Policies.Client)]
     [Route("api/[controller]")]
     [ApiController]
     public class DegreeController : DiplomaApiControllerBase

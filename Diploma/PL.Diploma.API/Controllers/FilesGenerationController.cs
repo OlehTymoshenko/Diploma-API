@@ -1,16 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BL.Interfaces.Subdomains.FilesGeneration;
 using BL.Models.FilesGeneration;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
+using PL.Utils.Auth;
 
 namespace PL.Diploma.API.Controllers
 {
     [Consumes("application/json")]
     [Produces("application/json")]
-    //[Authorize(Policies.Client)]
+    [Authorize(Policies.Client)]
     [Route("api/[controller]")]
     [ApiController]
     public class FilesGenerationController : DiplomaApiControllerBase

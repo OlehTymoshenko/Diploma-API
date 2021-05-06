@@ -3,7 +3,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DL.EF.Migrations.Migrations
 {
-    public partial class UpdateTablesForGenerationFilesSubdomain : Migration
+    public partial class ConfiguringTablesOfFilesGenerationSubdomain : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -39,16 +39,48 @@ namespace DL.EF.Migrations.Migrations
                 type: "integer",
                 nullable: false,
                 defaultValue: 0);
+
+            migrationBuilder.AddColumn<long>(
+                name: "UserId",
+                table: "GeneratedFiles",
+                type: "bigint",
+                nullable: false,
+                defaultValue: 0L);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GeneratedFiles_UserId",
+                table: "GeneratedFiles",
+                column: "UserId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_GeneratedFiles_Users_UserId",
+                table: "GeneratedFiles",
+                column: "UserId",
+                principalTable: "Users",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_GeneratedFiles_Users_UserId",
+                table: "GeneratedFiles");
+
+            migrationBuilder.DropIndex(
+                name: "IX_GeneratedFiles_UserId",
+                table: "GeneratedFiles");
+
             migrationBuilder.DropColumn(
                 name: "Format",
                 table: "GeneratedFiles");
 
             migrationBuilder.DropColumn(
                 name: "Type",
+                table: "GeneratedFiles");
+
+            migrationBuilder.DropColumn(
+                name: "UserId",
                 table: "GeneratedFiles");
 
             migrationBuilder.AddColumn<long>(

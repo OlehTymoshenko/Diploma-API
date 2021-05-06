@@ -55,7 +55,12 @@ namespace DL.EF.Migrations.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("integer");
 
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("GeneratedFiles");
                 });
@@ -235,6 +240,17 @@ namespace DL.EF.Migrations.Migrations
                     b.ToTable("RoleUser");
                 });
 
+            modelBuilder.Entity("DL.Entities.GeneratedFile", b =>
+                {
+                    b.HasOne("DL.Entities.User", "User")
+                        .WithMany("GeneratedFiles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("DL.Entities.RefreshToken", b =>
                 {
                     b.HasOne("DL.Entities.User", "User")
@@ -278,6 +294,8 @@ namespace DL.EF.Migrations.Migrations
 
             modelBuilder.Entity("DL.Entities.User", b =>
                 {
+                    b.Navigation("GeneratedFiles");
+
                     b.Navigation("RefreshTokens");
                 });
 #pragma warning restore 612, 618

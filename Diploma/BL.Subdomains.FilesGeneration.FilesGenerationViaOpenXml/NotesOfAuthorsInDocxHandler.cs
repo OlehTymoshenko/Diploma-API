@@ -51,14 +51,16 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml
 
             SetPublishingHouse(wordDoc, dataForCreating.PublishingHouse);
 
-            await SetDateAsync(wordDoc.MainDocumentPart.Document.Body, dataForCreating.PublishingDate);
-
-            await SetAuthorsFullNameSignatureDateAsync(wordDoc.MainDocumentPart.Document.Body, dataForCreating.Authors);
-
             SetNameOfUniversityDepartment(wordDoc, dataForCreating.UniversityDepartmentName);
 
+            await SetDateAsync(wordDoc.MainDocumentPart.Document.Body, dataForCreating.PublishingDate);
+
+            await SetAuthorsFullNameSignatureDateAsync(wordDoc.MainDocumentPart.Document.Body, dataForCreating.Authors,
+                dataForCreating.PublishingDate);
+
+
             await SetFullNameSignatureDateOfChiefOfUniversityDepartmentAsync(wordDoc.MainDocumentPart.Document.Body,
-                dataForCreating.FullNameOfChiefOfUniversityDepartment, 
+                dataForCreating.FullNameOfChiefOfUniversityDepartment,
                 dataForCreating.PublishingDate);
 
             // save wordDoc and get bytes from it
@@ -83,19 +85,18 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml
                 var authorFullNameWithDegrees = author.FullName + ", ";
 
                 // example of string after this step : "Tymoshenko Oleh Oleksiiovych, PhD, docent, "
-                author.Degrees.ForEach(d => authorFullNameWithDegrees = authorFullNameWithDegrees + d +  ", ");
+                author.Degrees.ForEach(d => authorFullNameWithDegrees = authorFullNameWithDegrees + d + ", ");
 
                 allAuthorsFullNameWithDegrees.Append(authorFullNameWithDegrees);
             }
 
             allAuthorsFullNameWithDegrees.ToString().Trim(' ', ',');
 
-
             wordDoc.ReplaceText(AUTHORS_FULL_NAME_PLACEHOLDER_IN_TEMPLATE,
                             allAuthorsFullNameWithDegrees.ToString().Trim(' ', ','),
                             false);
         }
-        
+
         private void SetPublicationNameWithItsStatistic(WordprocessingDocument wordDoc, string publicationNameWithItsStatstics)
         {
             wordDoc.ReplaceText(PUBLISHING_NAME_WITH_ITS_STATISTIC_PLACEHOLDER_IN_TEMPLATE,
@@ -131,17 +132,17 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml
             nodeWithPlacelohderForDate.Remove();
         }
 
-        private async Task SetAuthorsFullNameSignatureDateAsync(Body docBody, List<Author> authors)
+        private async Task SetAuthorsFullNameSignatureDateAsync(Body docBody, List<Author> authors, DateTime? date)
         {
             var nodeWithPlacelohderForAuthors = docBody.FindNodeWhichContainsText<OpenXmlElement>(
                 AURHORS_FULL_NAME_SIGNATURE_DATE_PLACEHOLDER_IN_TEMPLATE);
 
             var nodeForInserting = nodeWithPlacelohderForAuthors;
 
-            foreach(var author in authors)
+            foreach (var author in authors)
             {
-                var partialTemplateNodes = 
-                    await _partialTemplateFactory.GetFullNameSignatureDatePartialTemplateAsync(author.FullName);
+                var partialTemplateNodes =
+                    await _partialTemplateFactory.GetFullNameSignatureDatePartialTemplateAsync(author.FullName, date);
 
                 foreach (var node in partialTemplateNodes)
                 {
@@ -152,14 +153,19 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml
             nodeWithPlacelohderForAuthors.Remove();
         }
 
-        private void SetNameOfUniversityDepartment(WordprocessingDocument wordDoc, string unversityDepartmentName)
+        private void SetNameOfUniversityDepartment(WordprocessingDocument wordDoc, string universityDepartmentName)
         {
-            // it should be skipped first word ("кафедра")
-            string universityDepartmentNameForTemplate = new string(
-                    unversityDepartmentName.Substring(unversityDepartmentName.IndexOf(' ')));
+            string universityDepartmentNameForTemplate = universityDepartmentName;
+
+            // we should skip first word if this word is "кафедра"
+            if (universityDepartmentName.ToLower().StartsWith("кафедра"))
+            {
+                universityDepartmentNameForTemplate =
+                    universityDepartmentName.Substring(universityDepartmentName.IndexOf(' '));
+            }
 
             wordDoc.ReplaceText(UNIVERSITY_DEPARTMENT_NAME_PLACEHOLDER_IN_TEMPLATE,
-                            universityDepartmentNameForTemplate.Trim(' ', ','),
+                universityDepartmentNameForTemplate.Trim(' ', ','),
                             false);
         }
 
