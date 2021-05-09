@@ -22,11 +22,6 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils
 
         internal async Task<MemoryStream> LoadTemplateAsync(string fileName)
         {
-            #region DELETE IN PROD
-            Console.WriteLine($"{nameof(AppContext.BaseDirectory)} - {AppContext.BaseDirectory}");
-            Console.WriteLine($"{nameof(BaseDirectory)} - {BaseDirectory}");
-            #endregion
-
             string pathToFile = Path.Combine(BaseDirectory, TemplatesFolder, fileName);
 
             if (!File.Exists(pathToFile)) throw new ArgumentException($"Path to file is invalid. \nPath: {pathToFile}");

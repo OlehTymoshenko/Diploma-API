@@ -55,7 +55,7 @@ namespace BL.Subdomains.FilesGeneration
             return resultFileModel;
         }
 
-        private string GetFileName(FileType fileType, FileFormat fileFormat, string userFirstName, string userLastName)
+        private static string GetFileName(FileType fileType, FileFormat fileFormat, string userFirstName, string userLastName)
         {
             return $"{fileType}_{userFirstName}_{userLastName}_{DateTime.UtcNow.ToString("g").Replace(' ', '_')}" +
                 $".{fileFormat.ToString().ToLower()}";
