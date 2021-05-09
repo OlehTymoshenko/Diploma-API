@@ -63,7 +63,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BL.Subdomains.DataForFiles"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BL.Subdomains.FilesGeneration", "BL.Subdomains.FilesGeneration\BL.Subdomains.FilesGeneration.csproj", "{5BCA97FA-F21C-4638-8379-6A6CDB9C7674}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml", "BL.Subdomains.FilesGeneration.FilesGenerationViaOpenXml\BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.csproj", "{9F125863-0844-45A1-8B62-6FF6331E6549}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml", "BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml\BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.csproj", "{9F125863-0844-45A1-8B62-6FF6331E6549}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BL.Utils", "BL.Utils\BL.Utils.csproj", "{903901E1-291E-4A76-831C-79CEB8F0EB76}"
 EndProject
