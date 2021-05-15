@@ -1,27 +1,26 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Linq;
-using BL.Interfaces.Subdomains.FilesGeneration;
-using BL.Models.FilesGeneration;
-using DL.Entities.Enums;
-using DocumentFormat.OpenXml.Packaging;
-using BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils;
-using System.Text;
-using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml;
-using System.IO;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
+using BL.Models.FilesGeneration;
+using BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils;
+using BL.Interfaces.Subdomains.FilesGeneration;
+using DL.Entities.Enums;
 
 namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml
 {
     public class NotesOfAuthorsInDocxHandler : INotesOfAuthorsHandler
     {
-        public string TemplateName { get; init; } = @"Template_NotesOfAuthors.docx";
-
         public FileType Type => FileType.NoteOfAuthors;
 
         public FileFormat Format => FileFormat.DOCX;
 
+        public string TemplateName { get; init; } = @"Template_NotesOfAuthors.docx";
+
+        #region Placeholders names in a template
         internal const string AUTHORS_FULL_NAME_PLACEHOLDER_IN_TEMPLATE = @"$AuthorsFullNameWithDegrees$";
         internal const string AURHORS_FULL_NAME_SIGNATURE_DATE_PLACEHOLDER_IN_TEMPLATE = @"$AuhtorsFullNameSignaruteDate$";
         internal const string PUBLISHING_NAME_WITH_ITS_STATISTIC_PLACEHOLDER_IN_TEMPLATE = @"$PublishingNameWithItsStatistic$";
@@ -29,6 +28,7 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml
         internal const string DATE_PLACEHOLDER_IN_TEMPLATE = @"$Date$";
         internal const string UNIVERSITY_DEPARTMENT_NAME_PLACEHOLDER_IN_TEMPLATE = @"$UniverDepartmentName$";
         internal const string CHIEF_OF_UNIVERSITY_DEPARTMENT_FULLNAME_SIGNATURE_DATE_PLACEHOLDER_IN_TEMPLATE = @"$ChiefOfUniverDepartmentFullNameSignaruteDate$";
+        #endregion
 
         private readonly TemplateLoader _templateLoader;
         private readonly PartialTemplateFactory _partialTemplateFactory;
@@ -112,12 +112,12 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml
         }
 
         /// <summary>
-        /// Set date of creation document in template. This method doesn't work with metadata;
+        /// Set date of creation document in template. This method doesn't work with document metadata;
         /// </summary>
         /// <returns></returns>
         private async Task SetDateAsync(Body docBody, DateTime? date)
         {
-            var partialTemplateNodes = await _partialTemplateFactory.GetDatePartialTemplateAsync(date);
+            var partialTemplateNodes = await _partialTemplateFactory.GetDatePartialTemplateAsync(DateFormats.ddMMyyyy, date);
 
             var nodeWithPlacelohderForDate = docBody.FindNodeWhichContainsText<OpenXmlElement>(
                 DATE_PLACEHOLDER_IN_TEMPLATE);

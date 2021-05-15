@@ -34,9 +34,7 @@ namespace BL.Subdomains.FilesGeneration
             var fileHandler = _fileHandlerFactory.GetNotesOfAuthorsHandler(saveNoteOfAuthorsModel.Format);
             var createdFileModel = await fileHandler.CreateFileAsync(saveNoteOfAuthorsModel);
 
-            var userEmail = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value ?? 
-                throw new DiplomaApiExpection("Provided claims doesn't contain user email", System.Net.HttpStatusCode.BadRequest);
-            var user = await _unitOfWork.Users.SingleOrDefaultAsync(u => u.Email == userEmail);
+            var user = await GetUserFromDbAsync(userClaims);
 
             var resultFileModel = _mapper.Map<CreatedFileModel>(createdFileModel);
             resultFileModel.FileName = GetFileName(resultFileModel.Type, resultFileModel.Format, user.FirstName, user.LastName);
@@ -55,10 +53,25 @@ namespace BL.Subdomains.FilesGeneration
             return resultFileModel;
         }
 
-        private static string GetFileName(FileType fileType, FileFormat fileFormat, string userFirstName, string userLastName)
+        public Task<CreatedFileModel> CreateExpertCommissionActAsync(SaveExpertCommissionActModel saveExpertCommissionAct, IEnumerable<Claim> userClaims)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        private Task<User> GetUserFromDbAsync(IEnumerable<Claim> userClaims)
+        {
+            var userEmail = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value ??
+               throw new DiplomaApiExpection("Provided claims doesn't contain user email", System.Net.HttpStatusCode.BadRequest);
+
+            return _unitOfWork.Users.SingleOrDefaultAsync(u => u.Email == userEmail);
+        }
+
+        private string GetFileName(FileType fileType, FileFormat fileFormat, string userFirstName, string userLastName)
         {
             return $"{fileType}_{userFirstName}_{userLastName}_{DateTime.UtcNow.ToString("g").Replace(' ', '_')}" +
                 $".{fileFormat.ToString().ToLower()}";
         }
+
     }
 }

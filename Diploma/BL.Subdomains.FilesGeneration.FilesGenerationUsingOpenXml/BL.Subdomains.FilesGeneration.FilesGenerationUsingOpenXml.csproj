@@ -22,10 +22,16 @@
     <None Update="Templates\Paragph_FullNameSignatureDate.docx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\PartialTemplate_Date.docx">
+    <None Update="Templates\PartialTemplate_Date_In_Format_dd_MMMM_yyyy.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\PartialTemplate_Date_In_Format_dd_MM_yyyy.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Templates\PartialTemplate_FullNameSignatureDate.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Template_ExpertCommissionAct.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Templates\Template_NotesOfAuthors.docx">
