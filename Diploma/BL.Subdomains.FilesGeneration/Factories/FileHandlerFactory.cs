@@ -25,13 +25,13 @@ namespace BL.Subdomains.FilesGeneration
                                                           $"{fileFormat} format");
         }
 
-        public IExpertCommissionActHandler GetExpertCommissionActHandler(FileFormat fileFormat)
+        public IProtocolOfMeetingOfExpertCommissionHandler GetProtocolOfMeetingOfExpertCommissionHandler(FileFormat fileFormat)
         {
-            var expertCommissionActHandlers = _serviceProvider.GetServices<IExpertCommissionActHandler>();
+            var handlersForEachFormat = _serviceProvider.GetServices<IProtocolOfMeetingOfExpertCommissionHandler>();
 
-            var handler = expertCommissionActHandlers.FirstOrDefault(h => h.Format == fileFormat);
+            var handler = handlersForEachFormat.FirstOrDefault(h => h.Format == fileFormat);
 
-            return handler ?? throw new ArgumentException($"{FileType.ExpertCommissionAct} file type isn't supported in " +
+            return handler ?? throw new ArgumentException($"{FileType.ProtocolOfMeetingOfExpertCommission} file type isn't supported in " +
                                                           $"{fileFormat} format");
         }
     }

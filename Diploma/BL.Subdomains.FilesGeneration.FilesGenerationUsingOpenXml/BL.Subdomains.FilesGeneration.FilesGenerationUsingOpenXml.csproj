@@ -40,6 +40,9 @@
     <None Update="Templates\Template_NotesOfAuthors.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Templates\Template_ProtocolOfMeetingOfExpertCommission.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

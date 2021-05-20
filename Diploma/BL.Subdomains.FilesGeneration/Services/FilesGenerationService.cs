@@ -53,10 +53,11 @@ namespace BL.Subdomains.FilesGeneration
             return resultFileModel;
         }
 
-        public async Task<CreatedFileModel> CreateExpertCommissionActAsync(SaveExpertCommissionActModel saveExpertCommissionAct, IEnumerable<Claim> userClaims)
+        public async Task<CreatedFileModel> CreateProtocolOfMeetingOfExpertCommissionAsync(SaveProtocolOfMeetingOfExpertCommissionModel saveProtocolOfMeetingOfExpertCommissionModel, 
+            IEnumerable<Claim> userClaims)
         {
-            var fileHandler = _fileHandlerFactory.GetExpertCommissionActHandler(saveExpertCommissionAct.Format);
-            var createdFileModel = await fileHandler.CreateFileAsync(saveExpertCommissionAct);
+            var fileHandler = _fileHandlerFactory.GetProtocolOfMeetingOfExpertCommissionHandler(saveProtocolOfMeetingOfExpertCommissionModel.Format);
+            var createdFileModel = await fileHandler.CreateFileAsync(saveProtocolOfMeetingOfExpertCommissionModel);
 
             var user = await GetUserFromDbAsync(userClaims);
 

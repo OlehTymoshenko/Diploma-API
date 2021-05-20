@@ -4,7 +4,7 @@ using System;
 
 namespace BL.Models.FilesGeneration
 {
-    public class SaveExpertCommissionActModel
+    public class SaveProtocolOfMeetingOfExpertCommissionModel
     {
         public FileFormat Format { get; set; }
 

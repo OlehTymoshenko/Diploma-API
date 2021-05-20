@@ -22,7 +22,7 @@ namespace PL.Diploma.API.Controllers
         }
 
         [HttpPost("generate-notes-of-authors")]
-        public async Task<ActionResult> GenerateNoteOfAuthors(SaveNoteOfAuthorsModel saveNoteOfAuthorsModel)
+        public async Task<ActionResult> GenerateNotesOfAuthors(SaveNoteOfAuthorsModel saveNoteOfAuthorsModel)
         {
             var createdFile = await _filesGenerationService.CreateNotesOfAuthorsFileAsync(saveNoteOfAuthorsModel, 
                 HttpContext.User.Claims);
@@ -30,14 +30,23 @@ namespace PL.Diploma.API.Controllers
             return File(createdFile.FileAsBytes, createdFile.MIMEType, createdFile.FileName);
         }
 
-        [HttpPost("generate-expert-commission-act")]
-        public async Task<ActionResult> GenerateExpertCommissionAct(SaveExpertCommissionActModel saveExpertCommissionAct)
+        [HttpPost("generate-protocol-of-meeting-of-expert-commission")]
+        public async Task<ActionResult> GenerateProtocolOfMeetingOfExpertCommission(SaveProtocolOfMeetingOfExpertCommissionModel saveProtocolOfMeetingOfExpertCommissionModel)
+        {
+            var createdFile = await _filesGenerationService.CreateProtocolOfMeetingOfExpertCommissionAsync(saveProtocolOfMeetingOfExpertCommissionModel,
+                HttpContext.User.Claims);
+
+            return File(createdFile.FileAsBytes, createdFile.MIMEType, createdFile.FileName);
+        }
+
+        /*[HttpPost("generate-expert-commission-act")]
+        public async Task<ActionResult> GenerateProtocolOfMeetingOfExpertCommission(SaveExpertCommissionActModel saveExpertCommissionAct)
         {
             var createdFile = await _filesGenerationService.CreateExpertCommissionActAsync(saveExpertCommissionAct,
                 HttpContext.User.Claims);
 
             return File(createdFile.FileAsBytes, createdFile.MIMEType, createdFile.FileName);
-        }
+        }*/
 
     }
 }

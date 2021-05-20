@@ -2,11 +2,11 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Globalization;
 using System.Threading.Tasks;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml;
-using System.Globalization;
 
 namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils
 {
@@ -96,23 +96,6 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils
             using var memStream = await _templateLoader.LoadTemplateAsync(POSITION_SIGNATURE_FULL_NAME_PARTIAL_TEMPLATE);
             using var wordDoc = WordprocessingDocument.Open(memStream, true);
 
-           /* // nodes of template 
-            var positionSignatureFullNameTemplate = wordDoc.CloneAllBodyChildElements(true);
-
-            // remove position from template 
-            var nodeWithPosition = positionSignatureFullNameTemplate.FirstOrDefault(
-                e => e.InnerText.Contains(NAME_OF_PLACEHOLDER_FOR_POSITION_IN_PARTIAL_TEMPLATE));
-
-            var startIndexOfPosition = nodeWithPosition.InnerText.IndexOf(NAME_OF_PLACEHOLDER_FOR_POSITION_IN_PARTIAL_TEMPLATE);
-
-            var signatureFullNameTemplate = positionSignatureFullNameTemplate;
-
-            *//*            var childEl = positionSignatureFullNameTemplate.First().ChildElements;
-
-                        var a = positionSignatureFullNameTemplate.First();*//*
-
-            //throw new NotImplementedException();*/
-
             // replacements for partial template
             var dictForReplace = new Dictionary<string, string> {
                 { NAME_OF_PLACEHOLDER_FOR_POSITION_IN_PARTIAL_TEMPLATE,
@@ -168,6 +151,7 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils
                 $"File name of base template:{nameOfFileWithPartialTemplate}");
         }
 
+        // TODO: Add properties to lines for space 1.5 between lines 
         private Paragraph GetSignatureFullNameTemplate(string fullName, int numberOfWhitespacesForLeftPadding)
         {
             Paragraph resultParagraph = new Paragraph(); 

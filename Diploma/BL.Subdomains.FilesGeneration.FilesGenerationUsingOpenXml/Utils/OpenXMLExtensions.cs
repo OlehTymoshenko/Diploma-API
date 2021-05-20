@@ -1,10 +1,10 @@
-﻿using DocumentFormat.OpenXml;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using OpenXmlPowerTools;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils
 {

@@ -9,13 +9,13 @@ using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandlers
 {
-    public class ExpertCommissionActInDocxHandler : IExpertCommissionActHandler
+    public class ProtocolOfMeetingOfExpertCommissionInDocxHandler : IProtocolOfMeetingOfExpertCommissionHandler
     {
-        public FileType Type => FileType.ExpertCommissionAct;
+        public FileType Type => FileType.ProtocolOfMeetingOfExpertCommission;
 
         public FileFormat Format => FileFormat.DOCX;
 
-        public string TemplateName { get; init; } = @"Template_ExpertCommissionAct.docx";
+        public string TemplateName { get; init; } = @"Template_ProtocolOfMeetingOfExpertCommission.docx";
 
         #region Placeholders in the template
         internal const string ACT_COPY_NUMBER_PLACEHOLDER_IN_TEMPLATE = @"$ActCopyNumber$";
@@ -41,13 +41,13 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
         private readonly PartialTemplateFactory _partialTemplateFactory;
 
 
-        public ExpertCommissionActInDocxHandler()
+        public ProtocolOfMeetingOfExpertCommissionInDocxHandler()
         {
             _templateLoader = new TemplateLoader();
             _partialTemplateFactory = new PartialTemplateFactory();
         }
 
-        public async Task<FileModel> CreateFileAsync(SaveExpertCommissionActModel saveExpertCommissionActModel)
+        public async Task<FileModel> CreateFileAsync(SaveProtocolOfMeetingOfExpertCommissionModel saveProtocolOfMeetingOfExpertCommissionModel)
         {
             //////////////////////////////////////////////////// EXTREMELY IMPORTANT INFORMATION
             /// Order of calling methods is IMPORTANT. All async methods should be called after
@@ -58,36 +58,36 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
             using var memStream = await _templateLoader.LoadTemplateAsync(TemplateName);
             using var wordDoc = WordprocessingDocument.Open(memStream, true);
 
-            SetActCopyNumber(wordDoc, saveExpertCommissionActModel.ActCopyNumber);
+            SetActCopyNumber(wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.ActCopyNumber);
 
-            SetFacultyNumber(wordDoc, saveExpertCommissionActModel.FacultyNumber);
+            SetFacultyNumber(wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.FacultyNumber);
 
-            SetHeadOfTheCommissionFullName(wordDoc, saveExpertCommissionActModel.HeadOfTheCommissionName);
+            SetHeadOfTheCommissionFullName(wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.HeadOfTheCommissionName);
 
-            SetSecretaryOfTheCommissionFullName(wordDoc, saveExpertCommissionActModel.SecretaryOfTheCommissionName);
+            SetSecretaryOfTheCommissionFullName(wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.SecretaryOfTheCommissionName);
 
-            SetMembersOfTheCommissionFullNames (wordDoc, saveExpertCommissionActModel.MembersOfTheCommissionNames);
+            SetMembersOfTheCommissionFullNames (wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.MembersOfTheCommissionNames);
 
-            SetSpeakersFullNames(wordDoc, saveExpertCommissionActModel.SpeakersOfTheCommissionName);
+            SetSpeakersFullNames(wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.SpeakersOfTheCommissionName);
 
-            SetPublicationNameWithItsStatistic(wordDoc, saveExpertCommissionActModel.PublishingNameWithItsStatics);
+            SetPublicationNameWithItsStatistic(wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.PublishingNameWithItsStatics);
 
-            SetDecisionOfTheCommision(wordDoc, saveExpertCommissionActModel.IsPublicationAStateSecret, 
-                saveExpertCommissionActModel.DoesPubliscationContainServiceInformation, 
-                saveExpertCommissionActModel.DescriptionOfStateSecrectsOrServiceInformation,
-                saveExpertCommissionActModel.DoesCommissionAllowAIssuingOfThePublication);
+            SetDecisionOfTheCommision(wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.IsPublicationAStateSecret, 
+                saveProtocolOfMeetingOfExpertCommissionModel.DoesPubliscationContainServiceInformation, 
+                saveProtocolOfMeetingOfExpertCommissionModel.DescriptionOfStateSecrectsOrServiceInformation,
+                saveProtocolOfMeetingOfExpertCommissionModel.DoesCommissionAllowAIssuingOfThePublication);
 
             await SetDateInFormat_ddMMMMyyyyAsync(wordDoc.MainDocumentPart.Document.Body,
-                saveExpertCommissionActModel.ActCreationDate);
+                saveProtocolOfMeetingOfExpertCommissionModel.ActCreationDate);
 
             await SetFieldsForSignatureAsync(wordDoc.MainDocumentPart.Document.Body,
-                saveExpertCommissionActModel.HeadOfTheCommissionName,
-                saveExpertCommissionActModel.SecretaryOfTheCommissionName,
-                saveExpertCommissionActModel.MembersOfTheCommissionNames,
-                saveExpertCommissionActModel.ChiefOfSecurityDepartment);
+                saveProtocolOfMeetingOfExpertCommissionModel.HeadOfTheCommissionName,
+                saveProtocolOfMeetingOfExpertCommissionModel.SecretaryOfTheCommissionName,
+                saveProtocolOfMeetingOfExpertCommissionModel.MembersOfTheCommissionNames,
+                saveProtocolOfMeetingOfExpertCommissionModel.ChiefOfSecurityDepartment);
 
             await SetDateInFormat_ddMMyyyyAsync(wordDoc.MainDocumentPart.Document.Body,
-                saveExpertCommissionActModel.ActCreationDate);
+                saveProtocolOfMeetingOfExpertCommissionModel.ActCreationDate);
 
             // save wordDoc and get bytes from it
             wordDoc.Close();

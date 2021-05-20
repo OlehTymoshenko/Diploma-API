@@ -8,8 +8,9 @@ namespace BL.Interfaces.Subdomains.FilesGeneration
     public interface IFilesGenerationService
     {
         Task<CreatedFileModel> CreateNotesOfAuthorsFileAsync(SaveNoteOfAuthorsModel saveNoteOfAuthorsModel, IEnumerable<Claim> userClaims);
-
-        Task<CreatedFileModel> CreateExpertCommissionActAsync(SaveExpertCommissionActModel saveExpertCommissionAct, IEnumerable<Claim> userClaims);
+        
+        Task<CreatedFileModel> CreateProtocolOfMeetingOfExpertCommissionAsync(SaveProtocolOfMeetingOfExpertCommissionModel saveProtocolOfMeetingOfExpertCommissionModel,
+            IEnumerable<Claim> userClaims);
 
     }
 }

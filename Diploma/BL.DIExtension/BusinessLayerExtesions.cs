@@ -37,7 +37,7 @@ namespace BL.DIExtension
 
             serviceCollection.AddScoped<IFileHandlerFactory, FileHandlerFactory>();
             serviceCollection.AddScoped<INotesOfAuthorsHandler, NotesOfAuthorsInDocxHandler>();
-            serviceCollection.AddScoped<IExpertCommissionActHandler, ExpertCommissionActInDocxHandler>();
+            serviceCollection.AddScoped<IProtocolOfMeetingOfExpertCommissionHandler, ProtocolOfMeetingOfExpertCommissionInDocxHandler>();
             #endregion
 
             return serviceCollection;

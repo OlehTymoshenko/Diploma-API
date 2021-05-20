@@ -3,7 +3,7 @@
     public enum FileType
     {
         NoteOfAuthors,
-        ExpertCommissionAct,
+        ExpertisionAct,
         ProtocolOfMeetingOfExpertCommission
     }
 }

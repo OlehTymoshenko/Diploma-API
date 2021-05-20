@@ -6,6 +6,6 @@ namespace BL.Interfaces.Subdomains.FilesGeneration
     {
         public INotesOfAuthorsHandler GetNotesOfAuthorsHandler(FileFormat fileFormat);
 
-        public IExpertCommissionActHandler GetExpertCommissionActHandler(FileFormat fileFormat);
+        public IProtocolOfMeetingOfExpertCommissionHandler GetProtocolOfMeetingOfExpertCommissionHandler(FileFormat fileFormat);
     }
 }
