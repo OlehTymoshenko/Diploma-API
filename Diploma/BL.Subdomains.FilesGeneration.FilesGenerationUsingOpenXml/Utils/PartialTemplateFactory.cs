@@ -151,12 +151,18 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils
                 $"File name of base template:{nameOfFileWithPartialTemplate}");
         }
 
-        // TODO: Add properties to lines for space 1.5 between lines 
         private Paragraph GetSignatureFullNameTemplate(string fullName, int numberOfWhitespacesForLeftPadding)
         {
-            Paragraph resultParagraph = new Paragraph(); 
+            Paragraph resultParagraph = new Paragraph();
 
-            List<Run> signatureFullNameRuns = new List<Run>();
+            resultParagraph.ParagraphProperties = new ParagraphProperties()
+            {
+                SpacingBetweenLines = new SpacingBetweenLines()
+                {
+                    Line = "360",
+                    LineRule = LineSpacingRuleValues.Auto
+                }
+            };
 
             var positionRun = new Run();
 
@@ -168,8 +174,6 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils
                 Select(c => c.CloneNode(true))
             );
 
-            signatureFullNameRuns.Add(positionRun);
-
 
             var signatureRun = new Run();
             signatureRun.Append(new TabChar());
@@ -179,8 +183,6 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils
             });
             signatureRun.Append(new TabChar());
             signatureRun.Append(new TabChar());
-
-            signatureFullNameRuns.Add(signatureRun);
 
 
             var fullNameRun = new Run();
@@ -195,10 +197,10 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils
             });
             fullNameRun.Append(new TabChar());
             
-            signatureFullNameRuns.Add(fullNameRun);
-
-
-            resultParagraph.Append(signatureFullNameRuns);
+            
+            resultParagraph.Append(positionRun);
+            resultParagraph.Append(signatureRun);
+            resultParagraph.Append(fullNameRun);
 
             return resultParagraph;
         }
