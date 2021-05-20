@@ -6,7 +6,7 @@ using BL.Interfaces.Subdomains.FilesGeneration;
 using BL.Subdomains.Auth.Services;
 using BL.Subdomains.DataForFiles.Services;
 using BL.Subdomains.FilesGeneration;
-using BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml;
+using BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandlers;
 using BL.Infrastructure.AutoMapperProfiles;
 
 namespace BL.DIExtension
@@ -37,6 +37,7 @@ namespace BL.DIExtension
 
             serviceCollection.AddScoped<IFileHandlerFactory, FileHandlerFactory>();
             serviceCollection.AddScoped<INotesOfAuthorsHandler, NotesOfAuthorsInDocxHandler>();
+            serviceCollection.AddScoped<IExpertCommissionActHandler, ExpertCommissionActInDocxHandler>();
             #endregion
 
             return serviceCollection;

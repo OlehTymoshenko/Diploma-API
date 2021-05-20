@@ -29,5 +29,15 @@ namespace PL.Diploma.API.Controllers
 
             return File(createdFile.FileAsBytes, createdFile.MIMEType, createdFile.FileName);
         }
+
+        [HttpPost("generate-expert-commission-act")]
+        public async Task<ActionResult> GenerateExpertCommissionAct(SaveExpertCommissionActModel saveExpertCommissionAct)
+        {
+            var createdFile = await _filesGenerationService.CreateExpertCommissionActAsync(saveExpertCommissionAct,
+                HttpContext.User.Claims);
+
+            return File(createdFile.FileAsBytes, createdFile.MIMEType, createdFile.FileName);
+        }
+
     }
 }
