@@ -42,5 +42,5 @@ RUN dotnet publish "PL.Diploma.API.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "PL.Diploma.API.dll"] # for local testing
-#CMD ASPNETCORE_URLS=http://*:$PORT dotnet PL.Diploma.API.dll # for deployment to heroku
+#ENTRYPOINT ["dotnet", "PL.Diploma.API.dll"] # for local testing
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet PL.Diploma.API.dll # for deployment to heroku
