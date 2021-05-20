@@ -15,6 +15,7 @@ namespace BL.Subdomains.FilesGeneration
             _serviceProvider = serviceProvider;
         }
 
+
         public INotesOfAuthorsHandler GetNotesOfAuthorsHandler(FileFormat fileFormat)
         {
             var notesOfAuthorsHandlers = _serviceProvider.GetServices<INotesOfAuthorsHandler>();
@@ -23,6 +24,11 @@ namespace BL.Subdomains.FilesGeneration
 
             return handler ?? throw new ArgumentException($"{FileType.NoteOfAuthors} file type isn't supported in " +
                                                           $"{fileFormat} format");
+        }
+
+        public IExpertiseActHandler GetExpertiseActHandler(FileFormat fileFormat)
+        {
+            throw new NotImplementedException();
         }
 
         public IProtocolOfMeetingOfExpertCommissionHandler GetProtocolOfMeetingOfExpertCommissionHandler(FileFormat fileFormat)

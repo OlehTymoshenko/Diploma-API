@@ -24,7 +24,7 @@ namespace PL.Diploma.API.Controllers
         [HttpPost("generate-notes-of-authors")]
         public async Task<ActionResult> GenerateNotesOfAuthors(SaveNoteOfAuthorsModel saveNoteOfAuthorsModel)
         {
-            var createdFile = await _filesGenerationService.CreateNotesOfAuthorsFileAsync(saveNoteOfAuthorsModel, 
+            var createdFile = await _filesGenerationService.CreateNotesOfAuthorsAsync(saveNoteOfAuthorsModel, 
                 HttpContext.User.Claims);
 
             return File(createdFile.FileAsBytes, createdFile.MIMEType, createdFile.FileName);
@@ -39,14 +39,13 @@ namespace PL.Diploma.API.Controllers
             return File(createdFile.FileAsBytes, createdFile.MIMEType, createdFile.FileName);
         }
 
-        /*[HttpPost("generate-expert-commission-act")]
-        public async Task<ActionResult> GenerateProtocolOfMeetingOfExpertCommission(SaveExpertCommissionActModel saveExpertCommissionAct)
+        [HttpPost("generate-expertise-act")]
+        public async Task<ActionResult> GenerateExpertiseAct(SaveExpertiseActModel saveExpertiseActModel)
         {
-            var createdFile = await _filesGenerationService.CreateExpertCommissionActAsync(saveExpertCommissionAct,
-                HttpContext.User.Claims);
+            var createdFile = await _filesGenerationService.CreateExpertiseActAsync(saveExpertiseActModel, HttpContext.User.Claims);
 
             return File(createdFile.FileAsBytes, createdFile.MIMEType, createdFile.FileName);
-        }*/
+        }
 
     }
 }
