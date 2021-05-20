@@ -16,14 +16,16 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils
         private const char NON_BREAKING_SPACE = '\u00A0';
         #endregion
 
-        #region Names of files with templates
+        #region Names of files with partial templates
         internal const string FULL_NAME_SIGNATURE_DATE_PARTIAL_TEMPLATE = @"PartialTemplate_FullNameSignatureDate.docx";
+        internal const string POSITION_SIGNATURE_FULL_NAME_PARTIAL_TEMPLATE = @"PartialTemplate_PositionSignatureFullName.docx";
         internal const string DATE_IN_FORMAT_dd_MM_yyyy_PARTIAL_TEMPLATE = @"PartialTemplate_Date_In_Format_dd_MM_yyyy.docx";
         internal const string DATE_IN_FORMAT_dd_MMMM_yyyy_PARTIAL_TEMPLATE = @"PartialTemplate_Date_In_Format_dd_MMMM_yyyy.docx";
         #endregion
 
         #region Names of placeholders in files templates 
         private const string NAME_OF_PLACEHOLDER_FOR_FULL_NAME_IN_PARTIAL_TEMPLATE = "$FullName$";
+        private const string NAME_OF_PLACEHOLDER_FOR_POSITION_IN_PARTIAL_TEMPLATE = "$Position$";
         private const string NAME_OF_PLACEHOLDER_FOR_DAY_IN_PARTIAL_TEMPLATE = "$dd$";
         private const string NAME_OF_PLACEHOLDER_FOR_MONTH_AS_2_DIGITS_IN_PARTIAL_TEMPLATE = "$mm$";
         private const string NAME_OF_PLACEHOLDER_FOR_MONTH_AS_WORD_IN_PARTIAL_TEMPLATE = "$mmmm$";
@@ -38,7 +40,7 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils
         }
 
 
-        internal async Task<List<OpenXmlElement>> GetFullNameSignatureDatePartialTemplateAsync(string personFullName, DateTime? date = default)
+        internal async Task<List<OpenXmlElement>> GetFullNameSignatureDatePartialTemplateAsync(string fullName, DateTime? date = default)
         {
             // Load partial template from file
             using var memStream = await _templateLoader.LoadTemplateAsync(FULL_NAME_SIGNATURE_DATE_PARTIAL_TEMPLATE);
@@ -46,7 +48,7 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils
 
             // replacements for partial template
             var dictForReplace = GetReplacementsForDate(date);
-            dictForReplace.Add(NAME_OF_PLACEHOLDER_FOR_FULL_NAME_IN_PARTIAL_TEMPLATE, personFullName);
+            dictForReplace.Add(NAME_OF_PLACEHOLDER_FOR_FULL_NAME_IN_PARTIAL_TEMPLATE, fullName);
 
             wordDoc.ReplaceText(dictForReplace, false);
 
@@ -55,6 +57,89 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils
             return paragraphs ?? throw new FileFormatException("Base template from file for partial template " +
                 $"FullNameSignatureDate is invalid. \n" +
                 $"File name of base template:{FULL_NAME_SIGNATURE_DATE_PARTIAL_TEMPLATE}");
+        }
+
+        internal async Task<List<OpenXmlElement>> GetPositionSignatureFullNamePartialTemplateAsync(string position, string fullName)
+        {
+            // Load partial template from file
+            using var memStream = await _templateLoader.LoadTemplateAsync(POSITION_SIGNATURE_FULL_NAME_PARTIAL_TEMPLATE);
+            using var wordDoc = WordprocessingDocument.Open(memStream, true);
+
+            // replacements for partial template
+            var dictForReplace = new Dictionary<string, string> {
+                { NAME_OF_PLACEHOLDER_FOR_POSITION_IN_PARTIAL_TEMPLATE,
+                    position ?? new string(NON_BREAKING_SPACE, 10) },
+
+                { NAME_OF_PLACEHOLDER_FOR_FULL_NAME_IN_PARTIAL_TEMPLATE,
+                    fullName ?? new string(NON_BREAKING_SPACE, 10) }
+            };
+
+            wordDoc.ReplaceText(dictForReplace, false);
+
+            var paragraphs = wordDoc.MainDocumentPart.Document.Body.ChildElements.Where(e => e is Paragraph).ToList();
+
+            return paragraphs ?? throw new FileFormatException("Base template from file for partial template " +
+                $"PositionSignatureFullName is invalid. \n" +
+                $"File name of base template:{POSITION_SIGNATURE_FULL_NAME_PARTIAL_TEMPLATE}");
+        }
+
+        /// <summary>
+        /// Create a partial template (set of paraggraphs) with one position and multiple
+        /// fields for signarute each person from fullNames array
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="fullNames"></param>
+        /// <returns></returns>
+        internal async Task<List<OpenXmlElement>> GetPositionSignatureFullNamePartialTemplateAsync(string position, string[] fullNames)
+        {
+            // Load partial template from file
+            using var memStream = await _templateLoader.LoadTemplateAsync(POSITION_SIGNATURE_FULL_NAME_PARTIAL_TEMPLATE);
+            using var wordDoc = WordprocessingDocument.Open(memStream, true);
+
+           /* // nodes of template 
+            var positionSignatureFullNameTemplate = wordDoc.CloneAllBodyChildElements(true);
+
+            // remove position from template 
+            var nodeWithPosition = positionSignatureFullNameTemplate.FirstOrDefault(
+                e => e.InnerText.Contains(NAME_OF_PLACEHOLDER_FOR_POSITION_IN_PARTIAL_TEMPLATE));
+
+            var startIndexOfPosition = nodeWithPosition.InnerText.IndexOf(NAME_OF_PLACEHOLDER_FOR_POSITION_IN_PARTIAL_TEMPLATE);
+
+            var signatureFullNameTemplate = positionSignatureFullNameTemplate;
+
+            *//*            var childEl = positionSignatureFullNameTemplate.First().ChildElements;
+
+                        var a = positionSignatureFullNameTemplate.First();*//*
+
+            //throw new NotImplementedException();*/
+
+            // replacements for partial template
+            var dictForReplace = new Dictionary<string, string> {
+                { NAME_OF_PLACEHOLDER_FOR_POSITION_IN_PARTIAL_TEMPLATE,
+                    position ?? new string(NON_BREAKING_SPACE, 10) },
+
+                { NAME_OF_PLACEHOLDER_FOR_FULL_NAME_IN_PARTIAL_TEMPLATE,
+                    fullNames.First() }
+            };
+
+            wordDoc.ReplaceText(dictForReplace, false);
+
+            var nodeForInserting = wordDoc.MainDocumentPart.Document.Body.FirstOrDefault(
+                n => n.InnerText.Contains(position)) as Paragraph;
+
+            // add fields for signature of rest persons
+            foreach (var name in fullNames.Skip(1))
+            {
+                var lineForMemberSignatureWithoutPosition = GetSignatureFullNameTemplate(name, position.Length);
+
+                nodeForInserting.InsertAfterSelf(lineForMemberSignatureWithoutPosition);
+            }
+
+            var paragraphs = wordDoc.MainDocumentPart.Document.Body.ChildElements.Where(e => e is Paragraph).ToList();
+
+            return paragraphs ?? throw new FileFormatException("Base template from file for partial template " +
+                $"PositionSignatureFullName is invalid. \n" +
+                $"File name of base template:{POSITION_SIGNATURE_FULL_NAME_PARTIAL_TEMPLATE}");
         }
 
         internal async Task<List<OpenXmlElement>> GetDatePartialTemplateAsync(DateFormats dateFormat, DateTime? date = default)
@@ -83,6 +168,56 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils
                 $"File name of base template:{nameOfFileWithPartialTemplate}");
         }
 
+        private Paragraph GetSignatureFullNameTemplate(string fullName, int numberOfWhitespacesForLeftPadding)
+        {
+            Paragraph resultParagraph = new Paragraph(); 
+
+            List<Run> signatureFullNameRuns = new List<Run>();
+
+            var positionRun = new Run();
+
+            // 5 is a number of white spaces, that equals to 1 tab
+            int numberOfTabSpaces = numberOfWhitespacesForLeftPadding / 5;
+
+            positionRun.Append(
+                Enumerable.Repeat(new TabChar(), numberOfTabSpaces).
+                Select(c => c.CloneNode(true))
+            );
+
+            signatureFullNameRuns.Add(positionRun);
+
+
+            var signatureRun = new Run();
+            signatureRun.Append(new TabChar());
+            signatureRun.Append(new Text()
+            {
+                Text = "___________"
+            });
+            signatureRun.Append(new TabChar());
+            signatureRun.Append(new TabChar());
+
+            signatureFullNameRuns.Add(signatureRun);
+
+
+            var fullNameRun = new Run();
+
+            var fullNameRunProp = new RunProperties();
+            fullNameRunProp.Append(new Underline() { Val = UnderlineValues.Single });
+            
+            fullNameRun.Append(fullNameRunProp);
+            fullNameRun.Append(new Text()
+            {
+                Text = fullName
+            });
+            fullNameRun.Append(new TabChar());
+            
+            signatureFullNameRuns.Add(fullNameRun);
+
+
+            resultParagraph.Append(signatureFullNameRuns);
+
+            return resultParagraph;
+        }
 
         private Dictionary<string,string> GetReplacementsForDate(DateTime? date, int minCountOfNonBreakingSpacesNumber = 3, string cultureName = "uk-UA")
         {

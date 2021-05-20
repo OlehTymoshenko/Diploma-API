@@ -31,6 +31,9 @@
     <None Update="Templates\PartialTemplate_FullNameSignatureDate.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Templates\PartialTemplate_PositionSignatureFullName.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\Template_ExpertCommissionAct.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

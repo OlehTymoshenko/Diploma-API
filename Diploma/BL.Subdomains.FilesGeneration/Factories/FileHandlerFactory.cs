@@ -24,5 +24,15 @@ namespace BL.Subdomains.FilesGeneration
             return handler ?? throw new ArgumentException($"{FileType.NoteOfAuthors} file type isn't supported in " +
                                                           $"{fileFormat} format");
         }
+
+        public IExpertCommissionActHandler GetExpertCommissionActHandler(FileFormat fileFormat)
+        {
+            var expertCommissionActHandlers = _serviceProvider.GetServices<IExpertCommissionActHandler>();
+
+            var handler = expertCommissionActHandlers.FirstOrDefault(h => h.Format == fileFormat);
+
+            return handler ?? throw new ArgumentException($"{FileType.ExpertCommissionAct} file type isn't supported in " +
+                                                          $"{fileFormat} format");
+        }
     }
 }

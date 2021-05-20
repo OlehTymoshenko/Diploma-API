@@ -10,7 +10,7 @@ using BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils;
 using BL.Interfaces.Subdomains.FilesGeneration;
 using DL.Entities.Enums;
 
-namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml
+namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandlers
 {
     public class NotesOfAuthorsInDocxHandler : INotesOfAuthorsHandler
     {
