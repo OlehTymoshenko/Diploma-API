@@ -9,7 +9,7 @@ namespace BL.Models.FilesGeneration
     {
         public FileFormat Format { get; set; }
 
-        public List<Author> Authors { get; set; }
+        public List<Scientist> Authors { get; set; }
 
         public string PublishingNameWithItsStatics { get; set; }
 

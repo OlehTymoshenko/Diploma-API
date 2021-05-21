@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Wordprocessing;
+using wpdNS = DocumentFormat.OpenXml.Wordprocessing;
 using OpenXmlPowerTools;
 
 namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils
@@ -26,14 +27,36 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils
             return wpd;
         }
 
+        internal static WordprocessingDocument ReplaceTextInsideTables(this WordprocessingDocument wpd, string oldValue, string newValue)
+        {
+            var docBody = wpd.MainDocumentPart.Document.Body;
+            var tables = docBody.Descendants<wpdNS.Table>();
+
+            foreach (var table in tables)
+            {
+                var textElements = table.Descendants<wpdNS.Text>();
+
+                foreach(var textEl in textElements)
+                {
+                    if(textEl.Text.Contains(oldValue))
+                    {
+                        textEl.Text = textEl.Text.Replace(oldValue, newValue, StringComparison.CurrentCultureIgnoreCase);
+                    }
+                }
+            }
+            
+
+            return wpd;
+        }
+
         internal static List<OpenXmlElement> CloneAllBodyChildElements(this WordprocessingDocument wpd, bool deep)
         {
             return wpd.MainDocumentPart.Document.Body.Select(n => n.CloneNode(deep)).ToList();
         }
 
-        internal static T FindNodeWhichContainsText<T>(this Body body, string nodeInnerText) where T : OpenXmlElement
+        internal static T FindNodeWhichContainsText<T>(this wpdNS.Body body, string nodeInnerText) where T : OpenXmlElement
         {
-            return body.ChildElements.FirstOrDefault(e => e.InnerText.Contains(nodeInnerText)) as T;
+            return body.Descendants<T>().FirstOrDefault(e => e.InnerText.Contains(nodeInnerText)) as T;
         }
 
         /// <summary>
@@ -43,9 +66,9 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils
         /// <param name="oldNodeInnerText"></param>
         /// <param name="newNodes"></param>
         /// <returns></returns>
-        internal static Body ReplaceNode(this Body docBody, string oldNodeInnerText, List<OpenXmlElement> newNodes)
+        internal static wpdNS.Body ReplaceNode<T>(this wpdNS.Body docBody, string oldNodeInnerText, List<OpenXmlElement> newNodes) where T : OpenXmlElement
         {
-            var oldNode = docBody.FindNodeWhichContainsText<OpenXmlElement>(oldNodeInnerText) ?? 
+            var oldNode = docBody.FindNodeWhichContainsText<T>(oldNodeInnerText) ?? 
                 throw new ArgumentException("Can't find an old node for replacing. " +
                 $"Value of argument oldNodeInnerText is \"{oldNodeInnerText}\"");
 
@@ -54,13 +77,13 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils
             return docBody;
         }
 
-        internal static Body ReplaceNode(this Body docBody, OpenXmlElement oldNode, List<OpenXmlElement> newNodes)
+        internal static wpdNS.Body ReplaceNode<T>(this wpdNS.Body docBody, T oldNode, List<T> newNodes) where T : OpenXmlElement
         {
             var nodeForInserting = oldNode;
 
             foreach (var node in newNodes)
             {
-                nodeForInserting = nodeForInserting.InsertAfterSelf(node.CloneNode(true));
+                nodeForInserting = nodeForInserting.InsertAfterSelf(node.CloneNode(true)) as T;
             }
 
             oldNode.Remove();

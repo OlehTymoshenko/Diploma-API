@@ -39,11 +39,16 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
             _partialTemplateFactory = new PartialTemplateFactory();
         }
 
-
         public async Task<FileModel> CreateFileAsync(SaveNoteOfAuthorsModel dataForCreating)
         {
             using var memStream = await _templateLoader.LoadTemplateAsync(TemplateName);
             using var wordDoc = WordprocessingDocument.Open(memStream, true);
+
+            //////////////////////////////////////////////////// EXTREMELY IMPORTANT INFORMATION
+            /// Order of calling methods is IMPORTANT. All async methods should be called after
+            /// all sync methods. 
+            /// The reason for this strange behaviour is unknown
+            //////////////////////////////////////////////////// 
 
             SetAuthorsFullNameWithDegrees(wordDoc, dataForCreating.Authors);
 
@@ -75,7 +80,7 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
 
         }
 
-        private void SetAuthorsFullNameWithDegrees(WordprocessingDocument wordDoc, List<Author> authors)
+        private void SetAuthorsFullNameWithDegrees(WordprocessingDocument wordDoc, List<Scientist> authors)
         {
             var allAuthorsFullNameWithDegrees = new StringBuilder();
 
@@ -132,7 +137,7 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
             nodeWithPlacelohderForDate.Remove();
         }
 
-        private async Task SetAuthorsFullNameSignatureDateAsync(Body docBody, List<Author> authors, DateTime? date)
+        private async Task SetAuthorsFullNameSignatureDateAsync(Body docBody, List<Scientist> authors, DateTime? date)
         {
             var nodeWithPlacelohderForAuthors = docBody.FindNodeWhichContainsText<OpenXmlElement>(
                 AURHORS_FULL_NAME_SIGNATURE_DATE_PLACEHOLDER_IN_TEMPLATE);

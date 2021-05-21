@@ -12,7 +12,7 @@ namespace BL.Models.FilesGeneration
 
         public int FacultyNumber { get; set; }
 
-        public DateTime ActCreationDate { get; set; }
+        public DateTime ProtocolCreationDate { get; set; }
 
         public string HeadOfTheCommissionName { get; set; }
 

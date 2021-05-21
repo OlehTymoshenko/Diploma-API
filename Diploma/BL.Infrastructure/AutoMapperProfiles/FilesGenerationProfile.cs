@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BL.Models.FilesGeneration;
 using BL.Utils;
+using DL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,9 @@ namespace BL.Infrastructure.AutoMapperProfiles
                 ForMember(c => c.MIMEType, opt => opt.MapFrom(f => 
                     FileFormatToMIMETypeConverter.FileFormatToMIME(f.Format))
                 );
+
+            CreateMap<GeneratedFile, DescriptionOfGeneratedFile>();
+                
         }
     }
 }
