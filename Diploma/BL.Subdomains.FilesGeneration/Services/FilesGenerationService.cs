@@ -53,9 +53,28 @@ namespace BL.Subdomains.FilesGeneration
             return resultFileModel;
         }
 
-        public Task<CreatedFileModel> CreateExpertiseActAsync(SaveExpertiseActModel saveExpertiseActModel, IEnumerable<Claim> userClaims)
+        public async Task<CreatedFileModel> CreateExpertiseActAsync(SaveExpertiseActModel saveExpertiseActModel, IEnumerable<Claim> userClaims)
         {
-            throw new NotImplementedException();
+            var fileHandler = _fileHandlerFactory.GetExpertiseActHandler(saveExpertiseActModel.Format);
+            var createdFileModel = await fileHandler.CreateFileAsync(saveExpertiseActModel);
+
+            var user = await GetUserFromDbAsync(userClaims);
+
+            var resultFileModel = _mapper.Map<CreatedFileModel>(createdFileModel);
+            resultFileModel.FileName = GetFileName(resultFileModel.Type, resultFileModel.Format, user.FirstName, user.LastName);
+
+            await _unitOfWork.GeneratedFiles.AddAsync(new GeneratedFile()
+            {
+                Format = resultFileModel.Format,
+                Type = resultFileModel.Type,
+                Name = resultFileModel.FileName,
+                CreationDate = DateTime.UtcNow,
+                User = user
+            });
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return resultFileModel;
         }
 
         public async Task<CreatedFileModel> CreateProtocolOfMeetingOfExpertCommissionAsync(SaveProtocolOfMeetingOfExpertCommissionModel saveProtocolOfMeetingOfExpertCommissionModel, 

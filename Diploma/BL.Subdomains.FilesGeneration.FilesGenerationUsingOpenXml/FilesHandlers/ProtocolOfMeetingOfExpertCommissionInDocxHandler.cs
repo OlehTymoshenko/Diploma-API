@@ -4,6 +4,7 @@ using BL.Interfaces.Subdomains.FilesGeneration;
 using BL.Models.FilesGeneration;
 using BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils;
 using DL.Entities.Enums;
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 
@@ -78,7 +79,7 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
                 saveProtocolOfMeetingOfExpertCommissionModel.DoesCommissionAllowAIssuingOfThePublication);
 
             await SetDateInFormat_ddMMMMyyyyAsync(wordDoc.MainDocumentPart.Document.Body,
-                saveProtocolOfMeetingOfExpertCommissionModel.ActCreationDate);
+                saveProtocolOfMeetingOfExpertCommissionModel.ProtocolCreationDate);
 
             await SetFieldsForSignatureAsync(wordDoc.MainDocumentPart.Document.Body,
                 saveProtocolOfMeetingOfExpertCommissionModel.HeadOfTheCommissionName,
@@ -87,7 +88,7 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
                 saveProtocolOfMeetingOfExpertCommissionModel.ChiefOfSecurityDepartment);
 
             await SetDateInFormat_ddMMyyyyAsync(wordDoc.MainDocumentPart.Document.Body,
-                saveProtocolOfMeetingOfExpertCommissionModel.ActCreationDate);
+                saveProtocolOfMeetingOfExpertCommissionModel.ProtocolCreationDate);
 
             // save wordDoc and get bytes from it
             wordDoc.Close();
@@ -120,7 +121,7 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
         {
             var partialTemplateNodes = await _partialTemplateFactory.GetDatePartialTemplateAsync(DateFormats.ddMMMMyyyy, date);
 
-            docBody.ReplaceNode(DATE_IN_FORMAT_ddMMMMyyyy_PLACEHOLDER_IN_TEMPLATE, partialTemplateNodes);
+            docBody.ReplaceNode<OpenXmlElement>(DATE_IN_FORMAT_ddMMMMyyyy_PLACEHOLDER_IN_TEMPLATE, partialTemplateNodes);
         }
 
         private void SetHeadOfTheCommissionFullName(WordprocessingDocument wordDoc, string headOfTheCommissionFullName)
@@ -202,7 +203,7 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
                 await _partialTemplateFactory.GetPositionSignatureFullNamePartialTemplateAsync("Голова комісії", 
                 headOfTheCommissionName);
 
-            docBody.ReplaceNode(HEAD_OF_THE_COMMISSION_SIGNATURE_FULLNAME_PLACEHOLDER_IN_TEMPLATE, 
+            docBody.ReplaceNode<OpenXmlElement>(HEAD_OF_THE_COMMISSION_SIGNATURE_FULLNAME_PLACEHOLDER_IN_TEMPLATE, 
                 headOfTheCommissionPartialTemplateNodes);
 
 
@@ -211,7 +212,7 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
                 await _partialTemplateFactory.GetPositionSignatureFullNamePartialTemplateAsync("Секретар комісії",
                 secretaryOfTheCommissionName);
 
-            docBody.ReplaceNode(SECRETARY_OF_THE_COMMISSION_SIGNATURE_FULLNAME_PLACEHOLDER_IN_TEMPLATE, 
+            docBody.ReplaceNode<OpenXmlElement>(SECRETARY_OF_THE_COMMISSION_SIGNATURE_FULLNAME_PLACEHOLDER_IN_TEMPLATE, 
                 secretaryOfTheCommissionPartialTemplateNodes);
 
 
@@ -219,7 +220,7 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
             var membersOfTheCommissionPartialTemplateNodes = await _partialTemplateFactory.
                 GetPositionSignatureFullNamePartialTemplateAsync("Члени комісії", membersOfTheCommissionName);
 
-            docBody.ReplaceNode(MEMBERS_OF_THE_COMMISSION_SIGNATURE_FULLNAME_PLACEHOLDER_IN_TEMPLATE,
+            docBody.ReplaceNode<OpenXmlElement>(MEMBERS_OF_THE_COMMISSION_SIGNATURE_FULLNAME_PLACEHOLDER_IN_TEMPLATE,
                 membersOfTheCommissionPartialTemplateNodes);
 
 
@@ -228,7 +229,7 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
                 await _partialTemplateFactory.GetPositionSignatureFullNamePartialTemplateAsync("Начальник режимно-секретного відділу",
                 chiefOfSecurityDepartmentName);
 
-            docBody.ReplaceNode(CHIEF_OF_THE_SECURITY_DEPARTMENT_SIGNATURE_FULLNAME_PLACEHOLDER_IN_TEMPLATE,
+            docBody.ReplaceNode<OpenXmlElement>(CHIEF_OF_THE_SECURITY_DEPARTMENT_SIGNATURE_FULLNAME_PLACEHOLDER_IN_TEMPLATE,
                 chiefOfSecurityDepartmentPartialTemplateNodes);
         }
 
@@ -236,7 +237,7 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
         {
             var partialTemplateNodes = await _partialTemplateFactory.GetDatePartialTemplateAsync(DateFormats.ddMMyyyy, date);
 
-            docBody.ReplaceNode(DATE_IN_FORMAT_ddMMyyyy_PLACEHOLDER_IN_TEMPLATE, partialTemplateNodes);
+            docBody.ReplaceNode<OpenXmlElement>(DATE_IN_FORMAT_ddMMyyyy_PLACEHOLDER_IN_TEMPLATE, partialTemplateNodes);
         }
 
     }

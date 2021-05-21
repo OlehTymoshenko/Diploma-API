@@ -37,6 +37,9 @@
     <None Update="Templates\Template_ExpertCommissionAct.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Templates\Template_ExpertiseAct.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\Template_NotesOfAuthors.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

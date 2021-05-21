@@ -28,7 +28,12 @@ namespace BL.Subdomains.FilesGeneration
 
         public IExpertiseActHandler GetExpertiseActHandler(FileFormat fileFormat)
         {
-            throw new NotImplementedException();
+            var handlersForEachFormat = _serviceProvider.GetServices<IExpertiseActHandler>();
+
+            var handler = handlersForEachFormat.FirstOrDefault(h => h.Format == fileFormat);
+
+            return handler ?? throw new ArgumentException($"{FileType.ExpertiseAct} file type isn't supported in " +
+                                                          $"{fileFormat} format");
         }
 
         public IProtocolOfMeetingOfExpertCommissionHandler GetProtocolOfMeetingOfExpertCommissionHandler(FileFormat fileFormat)

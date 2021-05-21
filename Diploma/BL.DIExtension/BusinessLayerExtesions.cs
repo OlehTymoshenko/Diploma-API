@@ -8,6 +8,8 @@ using BL.Subdomains.DataForFiles.Services;
 using BL.Subdomains.FilesGeneration;
 using BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandlers;
 using BL.Infrastructure.AutoMapperProfiles;
+using BL.Interfaces.Subdomains.FilesGeneration.Services;
+using BL.Subdomains.FilesGeneration.Services;
 
 namespace BL.DIExtension
 {
@@ -34,10 +36,12 @@ namespace BL.DIExtension
 
             #region Files generation subdomain
             serviceCollection.AddScoped<IFilesGenerationService, FilesGenerationService>();
+            serviceCollection.AddScoped<IGeneratedFilesService, GeneratedFileService>();
 
             serviceCollection.AddScoped<IFileHandlerFactory, FileHandlerFactory>();
             serviceCollection.AddScoped<INotesOfAuthorsHandler, NotesOfAuthorsInDocxHandler>();
             serviceCollection.AddScoped<IProtocolOfMeetingOfExpertCommissionHandler, ProtocolOfMeetingOfExpertCommissionInDocxHandler>();
+            serviceCollection.AddScoped<IExpertiseActHandler, ExpertiseActInDocxHandler>();
             #endregion
 
             return serviceCollection;

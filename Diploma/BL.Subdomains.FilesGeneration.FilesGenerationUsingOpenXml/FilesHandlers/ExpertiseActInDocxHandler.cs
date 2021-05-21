@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using BL.Models.FilesGeneration;
 using BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils;
 using BL.Interfaces.Subdomains.FilesGeneration;
 using DL.Entities.Enums;
+using DocumentFormat.OpenXml;
 
 namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandlers
 {
@@ -18,10 +17,24 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
 
         public FileFormat Format => FileFormat.DOCX;
 
-        public string TemplateName { get; init; } = @"";
+        public string TemplateName { get; init; } = @"Template_ExpertiseAct.docx";
 
         #region Placeholders names in a template
-        internal const string TEMPLATE_PLACEHOLDER_IN_TEMPLATE = @"";
+        internal const string PROVOST_NAME_PLACEHOLDER_IN_TEMPLATE = @"$ProvostName$";
+        internal const string DATE_IN_FORMAT_dd_MMMM_yyyy_PLACEHOLDER_IN_TEMPLATE = @"$DateInFormat_ddMMMMyyyy$";
+        internal const string FACULTY_NUMBER_PLACEHOLDER_IN_TEMPLATE = @"$FacultyNumber$";
+        internal const string HEAD_OF_THE_COMMISSION_PLACEHOLDER_IN_TEMPLATE = @"$HeadOfTheCommission$";
+        internal const string MEMBERS_OF_THE_COMMISSION_PLACEHOLDER_IN_TEMPLATE = @"$MembersOfTheCommission$";
+        internal const string AUTHORS_PLACEHOLDER_IN_TEMPLATE = @"$Authors$";
+        internal const string PUBLICATION_NAME_WITH_ITS_STATISTIC_PLACEHOLDER_IN_TEMPLATE = @"$PublicationNameWithItsStatistic$";
+        internal const string DOES_COMMISSION_ALLOW_ISSUING_PLACEHOLDER_IN_TEMPLATE = @"$AllowIssuing$";
+        internal const string HEAD_OF_THE_COMMISSION_SIGNATURE_FULLNAME_PLACEHOLDER_IN_TEMPLATE = @"$HeadOfTheCommissionSignatureFullName$";
+        internal const string SECRETARY_OF_THE_COMMISSION_SIGNATURE_FULLNAME_PLACEHOLDER_IN_TEMPLATE = @"$SecretaryOfTheCommissionSignatureFullName$";
+        internal const string MEMBERS_OF_THE_COMMISSION_SIGNATURE_FULLNAME_PLACEHOLDER_IN_TEMPLATE = @"$MembersOfTheCommissionSignatureFullName$";
+        internal const string AUTHORS_OF_THE_PUBLICATION_SIGNATURE_FULLNAME_PLACEHOLDER_IN_TEMPLATE = @"$AuthorsSignatureFullName$";
+        internal const string CHIEF_OF_THE_SECURITY_DEPARTMENT_SIGNATURE_FULLNAME_PLACEHOLDER_IN_TEMPLATE = @"$ChiefOfSecurityDepartmentSignatureFullName$";
+        internal const string DATE_IN_FORMAT_ddMMyyyy_PLACEHOLDER_IN_TEMPLATE = @"$DateInFormat_ddMMyyyy$";
+
         #endregion
 
         private readonly TemplateLoader _templateLoader;
@@ -34,28 +47,39 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
         }
 
 
-        public async Task<FileModel> CreateFileAsync(SaveNoteOfAuthorsModel dataForCreating)
+        public async Task<FileModel> CreateFileAsync(SaveExpertiseActModel saveExpertiseActModel)
         {
             using var memStream = await _templateLoader.LoadTemplateAsync(TemplateName);
             using var wordDoc = WordprocessingDocument.Open(memStream, true);
 
-            SetAuthorsFullNameWithDegrees(wordDoc, dataForCreating.Authors);
+            //////////////////////////////////////////////////// EXTREMELY IMPORTANT INFORMATION
+            /// Order of calling methods is IMPORTANT. All async methods should be called after
+            /// all sync methods. 
+            /// The reason for this strange behaviour is unknown
+            //////////////////////////////////////////////////// 
 
-            SetPublicationNameWithItsStatistic(wordDoc, dataForCreating.PublishingNameWithItsStatics);
+            SetFacultyNumber(wordDoc, saveExpertiseActModel.FacultyNumber);
 
-            SetPublishingHouse(wordDoc, dataForCreating.PublishingHouse);
+            SetHeadOfTheCommission(wordDoc, saveExpertiseActModel.HeadOfTheCommission);
 
-            SetNameOfUniversityDepartment(wordDoc, dataForCreating.UniversityDepartmentName);
+            SetMembersOfTheCommission(wordDoc, saveExpertiseActModel.MembersOfTheCommission);
 
-            await SetDateAsync(wordDoc.MainDocumentPart.Document.Body, dataForCreating.PublishingDate);
+            SetAuthors(wordDoc, saveExpertiseActModel.AuthorsOfThePublication);
 
-            await SetAuthorsFullNameSignatureDateAsync(wordDoc.MainDocumentPart.Document.Body, dataForCreating.Authors,
-                dataForCreating.PublishingDate);
+            SetPublicationNameWithItsStatistic(wordDoc, saveExpertiseActModel.PublishingNameWithItsStatics);
 
+            SetProvostName(wordDoc, saveExpertiseActModel.ProvostName);
 
-            await SetFullNameSignatureDateOfChiefOfUniversityDepartmentAsync(wordDoc.MainDocumentPart.Document.Body,
-                dataForCreating.FullNameOfChiefOfUniversityDepartment,
-                dataForCreating.PublishingDate);
+            await SetDateInFormat_ddMMMMyyyyAsync(wordDoc, saveExpertiseActModel.ActCreationDate);
+
+            await SetFieldsForSignatureAsync(wordDoc.MainDocumentPart.Document.Body,
+                saveExpertiseActModel.HeadOfTheCommission.FullName,
+                saveExpertiseActModel.MembersOfTheCommission.Select(m => m.FullName).ToArray(),
+                saveExpertiseActModel.AuthorsOfThePublication.Select(m => m.FullName).ToArray(),
+                saveExpertiseActModel.SecretaryOfTheCommission,
+                saveExpertiseActModel.ChiefOfSecurityDepartment);
+
+            await SetDateInFormat_ddMMyyyyAsync(wordDoc.MainDocumentPart.Document.Body, saveExpertiseActModel.ActCreationDate);
 
             // save wordDoc and get bytes from it
             wordDoc.Close();
@@ -69,117 +93,192 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
 
         }
 
-        private void SetAuthorsFullNameWithDegrees(WordprocessingDocument wordDoc, List<Author> authors)
+        private void SetProvostName(WordprocessingDocument wordDoc, string provostName)
         {
-            var allAuthorsFullNameWithDegrees = new StringBuilder();
+            wordDoc.ReplaceTextInsideTables(PROVOST_NAME_PLACEHOLDER_IN_TEMPLATE, provostName.Trim(' ', ','));
+        }
+
+        private async Task SetDateInFormat_ddMMMMyyyyAsync(WordprocessingDocument wordDoc, DateTime? date)
+        {
+            var partialTemplateNodes = await _partialTemplateFactory.GetDatePartialTemplateAsync(DateFormats.ddMMMMyyyy, date);
+
+            wordDoc.MainDocumentPart.Document.Body.ReplaceNode<Paragraph>(DATE_IN_FORMAT_dd_MMMM_yyyy_PLACEHOLDER_IN_TEMPLATE, partialTemplateNodes);
+
+            var paragraphWithDate = wordDoc.MainDocumentPart.Document.Body.FindNodeWhichContainsText<Paragraph>(
+                string.Join(string.Empty, partialTemplateNodes.Select(x => x.InnerText))
+            );
+
+            paragraphWithDate.ParagraphProperties = new ParagraphProperties() {
+                Justification = new Justification() { Val = JustificationValues.Right} 
+            };
+        }
+
+        private void SetFacultyNumber(WordprocessingDocument wordDoc, int facultyNumber)
+        {
+            wordDoc.ReplaceText(FACULTY_NUMBER_PLACEHOLDER_IN_TEMPLATE,
+                            facultyNumber.ToString(),
+                            false);
+        }
+
+        private void SetHeadOfTheCommission(WordprocessingDocument wordDoc, Scientist headOfTheCommission)
+        {
+            wordDoc.ReplaceText(HEAD_OF_THE_COMMISSION_PLACEHOLDER_IN_TEMPLATE,
+                            ScientistToStringDegreesFirst(headOfTheCommission),
+                            false);
+        }
+
+        private void SetMembersOfTheCommission(WordprocessingDocument wordDoc, Scientist[] membersOfTheCommission)
+        {
+            string membersNameAndDegrees = "";
+
+            foreach (var member in membersOfTheCommission)
+            {
+                membersNameAndDegrees += ScientistToStringNameFirst(member) + ", ";
+            }
+
+            membersNameAndDegrees = membersNameAndDegrees.Trim(' ', ',');
+
+            wordDoc.ReplaceText(MEMBERS_OF_THE_COMMISSION_PLACEHOLDER_IN_TEMPLATE,
+                            membersNameAndDegrees,
+                            false);
+        }
+
+        private void SetAuthors(WordprocessingDocument wordDoc, Scientist[] authors)
+        {
+            string authorsNameAndDegrees = "";
 
             foreach (var author in authors)
             {
-                // example of string after this step : "Tymoshenko Oleh Oleksiiovych, "
-                var authorFullNameWithDegrees = author.FullName + ", ";
-
-                // example of string after this step : "Tymoshenko Oleh Oleksiiovych, PhD, docent, "
-                author.Degrees.ForEach(d => authorFullNameWithDegrees = authorFullNameWithDegrees + d + ", ");
-
-                allAuthorsFullNameWithDegrees.Append(authorFullNameWithDegrees);
+                authorsNameAndDegrees += ScientistToStringNameFirst(author) + ", ";
             }
 
-            allAuthorsFullNameWithDegrees.ToString().Trim(' ', ',');
+            authorsNameAndDegrees = authorsNameAndDegrees.Trim(' ', ',');
 
-            wordDoc.ReplaceText(AUTHORS_FULL_NAME_PLACEHOLDER_IN_TEMPLATE,
-                            allAuthorsFullNameWithDegrees.ToString().Trim(' ', ','),
+            wordDoc.ReplaceText(AUTHORS_PLACEHOLDER_IN_TEMPLATE,
+                            authorsNameAndDegrees,
                             false);
         }
 
         private void SetPublicationNameWithItsStatistic(WordprocessingDocument wordDoc, string publicationNameWithItsStatstics)
         {
-            wordDoc.ReplaceText(PUBLISHING_NAME_WITH_ITS_STATISTIC_PLACEHOLDER_IN_TEMPLATE,
+            wordDoc.ReplaceText(PUBLICATION_NAME_WITH_ITS_STATISTIC_PLACEHOLDER_IN_TEMPLATE,
                             publicationNameWithItsStatstics.Trim(' ', ','),
                             false);
         }
 
-        private void SetPublishingHouse(WordprocessingDocument wordDoc, string publishingHouse)
+        private async Task SetFieldsForSignatureAsync(Body docBody, string headOfTheCommissionName,
+            string[] membersOfTheCommissionName,
+            string[] authorsOfThePublication,
+            string secretaryOfTheCommissionName,
+            string chiefOfSecurityDepartmentName)
         {
-            wordDoc.ReplaceText(PUBLISHING_HOUSE_NAME_PLACEHOLDER_IN_TEMPLATE,
-                            publishingHouse.Trim(' ', ','),
-                            false);
+            // set field for signature head of the commission
+            var headOfTheCommissionPartialTemplateNodes =
+                await _partialTemplateFactory.GetPositionSignatureFullNamePartialTemplateAsync("Голова комісії",
+                headOfTheCommissionName);
+
+            docBody.ReplaceNode<OpenXmlElement>(HEAD_OF_THE_COMMISSION_SIGNATURE_FULLNAME_PLACEHOLDER_IN_TEMPLATE,
+                headOfTheCommissionPartialTemplateNodes);
+
+            // set field for signature members of the commission
+            var membersOfTheCommissionPartialTemplateNodes = await _partialTemplateFactory.
+                GetPositionSignatureFullNamePartialTemplateAsync("Члени комісії", membersOfTheCommissionName);
+
+            docBody.ReplaceNode<OpenXmlElement>(MEMBERS_OF_THE_COMMISSION_SIGNATURE_FULLNAME_PLACEHOLDER_IN_TEMPLATE,
+                membersOfTheCommissionPartialTemplateNodes);
+
+            // set field for signature authors of the publication
+            var authorsSurnameAndInitials = authorsOfThePublication.Select(a => GetFromFullNameSurnameAndInitials(a)).ToArray();
+
+            // add length to position in order to align fields for signature and full name with other rows
+            // 6 is a difference in the number of characters between this position name and the longest position name in this document
+            var authorsOfThePublicationPartialTemplateNodes = await _partialTemplateFactory.
+                GetPositionSignatureFullNamePartialTemplateAsync("Автори", authorsSurnameAndInitials);
+
+            docBody.ReplaceNode<OpenXmlElement>(AUTHORS_OF_THE_PUBLICATION_SIGNATURE_FULLNAME_PLACEHOLDER_IN_TEMPLATE,
+                authorsOfThePublicationPartialTemplateNodes);
+
+            // set field for signature secretary of the commission
+            var secretaryOfTheCommissionPartialTemplateNodes =
+                await _partialTemplateFactory.GetPositionSignatureFullNamePartialTemplateAsync("Секретар комісії",
+                secretaryOfTheCommissionName);
+
+            docBody.ReplaceNode<OpenXmlElement>(SECRETARY_OF_THE_COMMISSION_SIGNATURE_FULLNAME_PLACEHOLDER_IN_TEMPLATE,
+                secretaryOfTheCommissionPartialTemplateNodes);
+
+
+            // set field for signature chief of security department
+            var chiefOfSecurityDepartmentPartialTemplateNodes =
+                await _partialTemplateFactory.GetPositionSignatureFullNamePartialTemplateAsync("Начальник режимно-секретного відділу",
+                chiefOfSecurityDepartmentName);
+
+            docBody.ReplaceNode<OpenXmlElement>(CHIEF_OF_THE_SECURITY_DEPARTMENT_SIGNATURE_FULLNAME_PLACEHOLDER_IN_TEMPLATE,
+                chiefOfSecurityDepartmentPartialTemplateNodes);
         }
 
-        /// <summary>
-        /// Set date of creation document in template. This method doesn't work with document metadata;
-        /// </summary>
-        /// <returns></returns>
-        private async Task SetDateAsync(Body docBody, DateTime? date)
+        private async Task SetDateInFormat_ddMMyyyyAsync(Body docBody, DateTime? date)
         {
             var partialTemplateNodes = await _partialTemplateFactory.GetDatePartialTemplateAsync(DateFormats.ddMMyyyy, date);
 
-            var nodeWithPlacelohderForDate = docBody.FindNodeWhichContainsText<OpenXmlElement>(
-                DATE_PLACEHOLDER_IN_TEMPLATE);
-
-            var nodeForInserting = nodeWithPlacelohderForDate;
-
-            foreach (var node in partialTemplateNodes)
-            {
-                nodeForInserting = nodeForInserting.InsertAfterSelf(node.CloneNode(true));
-            }
-
-            nodeWithPlacelohderForDate.Remove();
+            docBody.ReplaceNode<OpenXmlElement>(DATE_IN_FORMAT_ddMMyyyy_PLACEHOLDER_IN_TEMPLATE, partialTemplateNodes);
         }
 
-        private async Task SetAuthorsFullNameSignatureDateAsync(Body docBody, List<Author> authors, DateTime? date)
+
+        private string ScientistToStringDegreesFirst(Scientist scientist)
         {
-            var nodeWithPlacelohderForAuthors = docBody.FindNodeWhichContainsText<OpenXmlElement>(
-                AURHORS_FULL_NAME_SIGNATURE_DATE_PLACEHOLDER_IN_TEMPLATE);
+            string resultString = "";
 
-            var nodeForInserting = nodeWithPlacelohderForAuthors;
-
-            foreach (var author in authors)
+            foreach (var degree in scientist.Degrees)
             {
-                var partialTemplateNodes =
-                    await _partialTemplateFactory.GetFullNameSignatureDatePartialTemplateAsync(author.FullName, date);
-
-                foreach (var node in partialTemplateNodes)
-                {
-                    nodeForInserting = nodeForInserting.InsertAfterSelf(node.CloneNode(true));
-                }
+                resultString += degree + ", ";
             }
 
-            nodeWithPlacelohderForAuthors.Remove();
+            resultString = resultString.Trim(' ', ',');
+
+            resultString += $" {scientist.FullName}";
+
+            return resultString;
         }
 
-        private void SetNameOfUniversityDepartment(WordprocessingDocument wordDoc, string universityDepartmentName)
+        private string ScientistToStringNameFirst(Scientist scientist)
         {
-            string universityDepartmentNameForTemplate = universityDepartmentName;
+            string resultString = "";
 
-            // we should skip first word if this word is "кафедра"
-            if (universityDepartmentName.ToLower().StartsWith("кафедра"))
+            resultString += $"{scientist.FullName}, ";
+
+            foreach (var degree in scientist.Degrees)
             {
-                universityDepartmentNameForTemplate =
-                    universityDepartmentName.Substring(universityDepartmentName.IndexOf(' '));
+                resultString += degree + ", ";
             }
 
-            wordDoc.ReplaceText(UNIVERSITY_DEPARTMENT_NAME_PLACEHOLDER_IN_TEMPLATE,
-                universityDepartmentNameForTemplate.Trim(' ', ','),
-                            false);
+            resultString = resultString.Trim(' ', ',');
+
+            return resultString;
         }
 
-        private async Task SetFullNameSignatureDateOfChiefOfUniversityDepartmentAsync(Body docBody, string fullNameOfChief, DateTime? dateTime)
+        /// <summary>
+        /// fullName should be in that format: Surname Name Father'sName
+        /// </summary>
+        /// <param name="fullName"></param>
+        /// <returns></returns>
+        private string GetFromFullNameSurnameAndInitials(string fullName)
         {
-            var partialTemplateNodes = await _partialTemplateFactory.GetFullNameSignatureDatePartialTemplateAsync(fullNameOfChief, dateTime);
+            string surnameWithInitials = "";
 
-            // paragraph with placoholder for chief, it's required only for searching appropriate node for 
-            // inserting paragraphs from partial template. It should be removed from final template
-            var nodeWithPlacelohderForChief = docBody.FindNodeWhichContainsText<OpenXmlElement>(
-                CHIEF_OF_UNIVERSITY_DEPARTMENT_FULLNAME_SIGNATURE_DATE_PLACEHOLDER_IN_TEMPLATE);
+            var partsOfFullName = fullName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-            var nodeForInserting = nodeWithPlacelohderForChief;
-
-            foreach (var node in partialTemplateNodes)
+            if (partsOfFullName.Length < 3)
+                surnameWithInitials = fullName;
+            else
             {
-                nodeForInserting = nodeForInserting.InsertAfterSelf(node.CloneNode(true));
+                surnameWithInitials = partsOfFullName.First() + " "; // surname 
+                partsOfFullName.Skip(1) // skip surname
+                    .Select(s => s.Substring(0, 1) + ".")
+                    .ToList()
+                    .ForEach(e => surnameWithInitials += e); // get initials
             }
 
-            nodeWithPlacelohderForChief.Remove();
+            return surnameWithInitials;
         }
     }
 }
