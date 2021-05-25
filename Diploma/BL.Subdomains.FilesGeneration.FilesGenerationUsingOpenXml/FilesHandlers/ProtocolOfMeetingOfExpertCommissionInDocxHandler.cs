@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using BL.Interfaces.Subdomains.FilesGeneration;
+using BL.Interfaces.Subdomains.FilesGeneration.Services;
 using BL.Models.FilesGeneration;
 using BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils;
 using DL.Entities.Enums;
@@ -26,7 +28,8 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
         internal const string SECRETARY_OF_THE_COMMISSION_PLACEHOLDER_IN_TEMPLATE = @"$SecretaryOfTheCommission$";
         internal const string MEMBERS_OF_THE_COMMISSION_PLACEHOLDER_IN_TEMPLATE = @"$MembersOfTheCommission$";
         internal const string SPEAKERS_PLACEHOLDER_IN_TEMPLATE = @"$Speakers$";
-        internal const string PUBLISHING_NAME_WITH_ITS_STATISTIC_PLACEHOLDER_IN_TEMPLATE = @"$PublishingNameWithItsStatistic$";
+        internal const string PUBLISHING_NAME_WITH_ITS_STATISTIC_IN_GENITIVE_CASE_PLACEHOLDER_IN_TEMPLATE = @"$PublishingNameWithItsStatisticGenitiveCase$";
+        internal const string PUBLISHING_NAME_WITH_ITS_STATISTIC_PREPOSITION_PLACEHOLDER_IN_TEMPLATE = @"$PublishingNameWithItsStatisticPreposition$";
         internal const string IS_THE_PUBLICATION_A_STATE_SECRET_PLACEHOLDER_IN_TEMPLATE = @"$IsPublicationStateSecret$";
         internal const string DOES_PUBLICATION_CONTAIN_SERVICE_INFO_PLACEHOLDER_IN_TEMPLATE = @"$DoesContainServiceInfo$";
         internal const string DESCRIPTION_OF_STATE_SECRETS_OR_SERVICE_INFO_PLACEHOLDER_IN_TEMPLATE = @"$DescriptionOfStateSecrectsOrServiceInformation$";
@@ -40,10 +43,12 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
 
         private readonly TemplateLoader _templateLoader;
         private readonly PartialTemplateFactory _partialTemplateFactory;
+        private IDeclensionService _declensionService;
 
 
-        public ProtocolOfMeetingOfExpertCommissionInDocxHandler()
+        public ProtocolOfMeetingOfExpertCommissionInDocxHandler(IDeclensionService declensionService)
         {
+            _declensionService = declensionService;
             _templateLoader = new TemplateLoader();
             _partialTemplateFactory = new PartialTemplateFactory();
         }
@@ -127,21 +132,22 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
         private void SetHeadOfTheCommissionFullName(WordprocessingDocument wordDoc, string headOfTheCommissionFullName)
         {
             wordDoc.ReplaceText(HEAD_OF_THE_COMMISSION_PLACEHOLDER_IN_TEMPLATE,
-                            headOfTheCommissionFullName,
+                            GetFromFullNameSurnameAndInitials(headOfTheCommissionFullName),
                             false);
         }
 
         private void SetSecretaryOfTheCommissionFullName(WordprocessingDocument wordDoc, string secretaryOfTheCommissionFullName)
         {
             wordDoc.ReplaceText(SECRETARY_OF_THE_COMMISSION_PLACEHOLDER_IN_TEMPLATE,
-                            secretaryOfTheCommissionFullName,
+                            GetFromFullNameSurnameAndInitials(secretaryOfTheCommissionFullName),
                             false);
         }
 
         private void SetMembersOfTheCommissionFullNames(WordprocessingDocument wordDoc, string[] membersOfTheCommissionFullNames)
         {
-            string membersOfTheCommissionAsSingleString = string.Join(", ", membersOfTheCommissionFullNames)
-                                                                .Trim(',', ' ');
+            string membersOfTheCommissionAsSingleString = 
+                string.Join(", ", membersOfTheCommissionFullNames.Select(n => GetFromFullNameSurnameAndInitials(n)))
+                .Trim(',', ' ');
 
             wordDoc.ReplaceText(MEMBERS_OF_THE_COMMISSION_PLACEHOLDER_IN_TEMPLATE,
                             membersOfTheCommissionAsSingleString,
@@ -150,8 +156,9 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
 
         private void SetSpeakersFullNames(WordprocessingDocument wordDoc, string[] speakers)
         {
-            string speakersAsSingleString = string.Join(", ", speakers)
-                                                  .Trim(',', ' ');
+            string speakersAsSingleString =
+                string.Join(", ", speakers.Select(n => GetFromFullNameSurnameAndInitials(n)))
+                .Trim(',', ' ');
 
             wordDoc.ReplaceText(SPEAKERS_PLACEHOLDER_IN_TEMPLATE,
                             speakersAsSingleString,
@@ -160,8 +167,24 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
 
         private void SetPublicationNameWithItsStatistic(WordprocessingDocument wordDoc, string publicationNameWithItsStatstics)
         {
-            wordDoc.ReplaceText(PUBLISHING_NAME_WITH_ITS_STATISTIC_PLACEHOLDER_IN_TEMPLATE,
-                            publicationNameWithItsStatstics.Trim(' ', ','),
+            // example: "навчальний посібник"
+            int indexOfStartNameOfScientificWork = publicationNameWithItsStatstics.IndexOfAny(new char[] { '«', '"' });
+            string typeOfScientificWork = publicationNameWithItsStatstics.Substring(0, indexOfStartNameOfScientificWork);
+
+            var ukrInflectedTypeOfScientificWork = _declensionService.ParseUkr(typeOfScientificWork);
+
+            var resultScientificPublicationNameInGenetiveCase = ukrInflectedTypeOfScientificWork.Genitive +
+                publicationNameWithItsStatstics.Substring(indexOfStartNameOfScientificWork).Trim(' ', ',');
+
+            var resultScientificPublicationNamePreposition = ukrInflectedTypeOfScientificWork.Prepositional +
+                publicationNameWithItsStatstics.Substring(indexOfStartNameOfScientificWork).Trim(' ', ',');
+
+            wordDoc.ReplaceText(PUBLISHING_NAME_WITH_ITS_STATISTIC_IN_GENITIVE_CASE_PLACEHOLDER_IN_TEMPLATE,
+                            resultScientificPublicationNameInGenetiveCase.Trim(' ', ','),
+                            false);
+
+            wordDoc.ReplaceText(PUBLISHING_NAME_WITH_ITS_STATISTIC_PREPOSITION_PLACEHOLDER_IN_TEMPLATE,
+                            resultScientificPublicationNamePreposition.Trim(' ', ','),
                             false);
         }
 
@@ -201,7 +224,7 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
             // set field for signature head of the commission
             var headOfTheCommissionPartialTemplateNodes = 
                 await _partialTemplateFactory.GetPositionSignatureFullNamePartialTemplateAsync("Голова комісії", 
-                headOfTheCommissionName);
+                GetFromFullNameSurnameAndInitials(headOfTheCommissionName));
 
             docBody.ReplaceNode<OpenXmlElement>(HEAD_OF_THE_COMMISSION_SIGNATURE_FULLNAME_PLACEHOLDER_IN_TEMPLATE, 
                 headOfTheCommissionPartialTemplateNodes);
@@ -210,7 +233,7 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
             // set field for signature secretary of the commission
             var secretaryOfTheCommissionPartialTemplateNodes =
                 await _partialTemplateFactory.GetPositionSignatureFullNamePartialTemplateAsync("Секретар комісії",
-                secretaryOfTheCommissionName);
+                GetFromFullNameSurnameAndInitials(secretaryOfTheCommissionName));
 
             docBody.ReplaceNode<OpenXmlElement>(SECRETARY_OF_THE_COMMISSION_SIGNATURE_FULLNAME_PLACEHOLDER_IN_TEMPLATE, 
                 secretaryOfTheCommissionPartialTemplateNodes);
@@ -218,7 +241,8 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
 
             // set field for signature members of the commission
             var membersOfTheCommissionPartialTemplateNodes = await _partialTemplateFactory.
-                GetPositionSignatureFullNamePartialTemplateAsync("Члени комісії", membersOfTheCommissionName);
+                GetPositionSignatureFullNamePartialTemplateAsync("Члени комісії", 
+                membersOfTheCommissionName.Select(n => GetFromFullNameSurnameAndInitials(n)).ToArray());
 
             docBody.ReplaceNode<OpenXmlElement>(MEMBERS_OF_THE_COMMISSION_SIGNATURE_FULLNAME_PLACEHOLDER_IN_TEMPLATE,
                 membersOfTheCommissionPartialTemplateNodes);
@@ -227,7 +251,7 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
             // set field for signature chief of security department
             var chiefOfSecurityDepartmentPartialTemplateNodes =
                 await _partialTemplateFactory.GetPositionSignatureFullNamePartialTemplateAsync("Начальник режимно-секретного відділу",
-                chiefOfSecurityDepartmentName);
+                GetFromFullNameSurnameAndInitials(chiefOfSecurityDepartmentName));
 
             docBody.ReplaceNode<OpenXmlElement>(CHIEF_OF_THE_SECURITY_DEPARTMENT_SIGNATURE_FULLNAME_PLACEHOLDER_IN_TEMPLATE,
                 chiefOfSecurityDepartmentPartialTemplateNodes);
@@ -238,6 +262,33 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
             var partialTemplateNodes = await _partialTemplateFactory.GetDatePartialTemplateAsync(DateFormats.ddMMyyyy, date);
 
             docBody.ReplaceNode<OpenXmlElement>(DATE_IN_FORMAT_ddMMyyyy_PLACEHOLDER_IN_TEMPLATE, partialTemplateNodes);
+        }
+
+
+
+        /// <summary>
+        /// fullName should be in that format: Surname Name Father'sName
+        /// </summary>
+        /// <param name="fullName"></param>
+        /// <returns></returns>
+        private string GetFromFullNameSurnameAndInitials(string fullName)
+        {
+            string surnameWithInitials = "";
+
+            var partsOfFullName = fullName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            if (partsOfFullName.Length < 3)
+                surnameWithInitials = fullName;
+            else
+            {
+                surnameWithInitials = partsOfFullName.First() + " "; // surname 
+                partsOfFullName.Skip(1) // skip surname
+                    .Select(s => s.Substring(0, 1) + ".")
+                    .ToList()
+                    .ForEach(e => surnameWithInitials += e); // get initials
+            }
+
+            return surnameWithInitials;
         }
 
     }

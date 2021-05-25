@@ -2,11 +2,6 @@
 using BL.Models.FilesGeneration;
 using BL.Utils;
 using DL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BL.Infrastructure.AutoMapperProfiles
 {
@@ -23,7 +18,6 @@ namespace BL.Infrastructure.AutoMapperProfiles
                 );
 
             CreateMap<GeneratedFile, DescriptionOfGeneratedFile>();
-                
         }
     }
 }
