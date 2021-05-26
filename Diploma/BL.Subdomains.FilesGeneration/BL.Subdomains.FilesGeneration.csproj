@@ -7,11 +7,13 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Morpher.WebService.V3.Client" Version="3.5.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BL.Interfaces\BL.Interfaces.csproj" />
     <ProjectReference Include="..\BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml\BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.csproj" />
+    <ProjectReference Include="..\Common.Configurations\Common.Configurations.csproj" />
     <ProjectReference Include="..\Common.Infrastructure\Common.Infrastructure.csproj" />
     <ProjectReference Include="..\DL.Interfaces\DL.Interfaces.csproj" />
   </ItemGroup>

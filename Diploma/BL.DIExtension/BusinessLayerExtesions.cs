@@ -37,6 +37,7 @@ namespace BL.DIExtension
             #region Files generation subdomain
             serviceCollection.AddScoped<IFilesGenerationService, FilesGenerationService>();
             serviceCollection.AddScoped<IGeneratedFilesService, GeneratedFileService>();
+            serviceCollection.AddScoped<IDeclensionService, DeclensionService>();
 
             serviceCollection.AddScoped<IFileHandlerFactory, FileHandlerFactory>();
             serviceCollection.AddScoped<INotesOfAuthorsHandler, NotesOfAuthorsInDocxHandler>();

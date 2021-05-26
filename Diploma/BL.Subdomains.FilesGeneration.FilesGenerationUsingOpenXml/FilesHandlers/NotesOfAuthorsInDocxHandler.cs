@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DocumentFormat.OpenXml;
@@ -8,6 +9,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using BL.Models.FilesGeneration;
 using BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils;
 using BL.Interfaces.Subdomains.FilesGeneration;
+using BL.Interfaces.Subdomains.FilesGeneration.Services;
 using DL.Entities.Enums;
 
 namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandlers
@@ -30,11 +32,13 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
         internal const string CHIEF_OF_UNIVERSITY_DEPARTMENT_FULLNAME_SIGNATURE_DATE_PLACEHOLDER_IN_TEMPLATE = @"$ChiefOfUniverDepartmentFullNameSignaruteDate$";
         #endregion
 
+        private IDeclensionService _declensionService;
         private readonly TemplateLoader _templateLoader;
         private readonly PartialTemplateFactory _partialTemplateFactory;
 
-        public NotesOfAuthorsInDocxHandler()
+        public NotesOfAuthorsInDocxHandler(IDeclensionService declensionService)
         {
+            _declensionService = declensionService;
             _templateLoader = new TemplateLoader();
             _partialTemplateFactory = new PartialTemplateFactory();
         }
@@ -104,8 +108,17 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
 
         private void SetPublicationNameWithItsStatistic(WordprocessingDocument wordDoc, string publicationNameWithItsStatstics)
         {
+            // example: "навчальний посібник"
+            int indexOfStartNameOfScientificWork = publicationNameWithItsStatstics.IndexOfAny(new char[] { '«', '"' });
+            string typeOfScientificWork = publicationNameWithItsStatstics.Substring(0, indexOfStartNameOfScientificWork);
+
+            var ukrInflectedTypeOfScientificWork = _declensionService.ParseUkr(typeOfScientificWork);
+
+            var resultStrForReplacement = ukrInflectedTypeOfScientificWork.Genitive +
+                publicationNameWithItsStatstics.Substring(indexOfStartNameOfScientificWork).Trim(' ', ',');
+
             wordDoc.ReplaceText(PUBLISHING_NAME_WITH_ITS_STATISTIC_PLACEHOLDER_IN_TEMPLATE,
-                            publicationNameWithItsStatstics.Trim(' ', ','),
+                            resultStrForReplacement,
                             false);
         }
 
@@ -172,7 +185,7 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
             wordDoc.ReplaceText(UNIVERSITY_DEPARTMENT_NAME_PLACEHOLDER_IN_TEMPLATE,
                 universityDepartmentNameForTemplate.Trim(' ', ','),
                             false);
-        }
+        } 
 
         private async Task SetFullNameSignatureDateOfChiefOfUniversityDepartmentAsync(Body docBody, string fullNameOfChief, DateTime? dateTime)
         {

@@ -11,7 +11,9 @@ namespace Common.Configurations
         {
             services.Configure<AppSettingsSection>(configuration.GetSection("AppSettings"));
             services.Configure<ConnectionStringsSection>(configuration.GetSection("ConnectionStrings"));
-            
+            services.Configure<MorpherSection>(configuration.GetSection("Morpher"));
+
+
             PostConfigureConnectionsStringsSection(services, configuration);
 
 
