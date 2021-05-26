@@ -114,8 +114,9 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
                 string.Join(string.Empty, partialTemplateNodes.Select(x => x.InnerText))
             );
 
-            paragraphWithDate.ParagraphProperties = new ParagraphProperties() {
-                Justification = new Justification() { Val = JustificationValues.Right} 
+            paragraphWithDate.ParagraphProperties = new ParagraphProperties()
+            {
+                Justification = new Justification() { Val = JustificationValues.Right }
             };
         }
 
@@ -128,8 +129,10 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
 
         private void SetHeadOfTheCommission(WordprocessingDocument wordDoc, Scientist headOfTheCommission)
         {
+            var inflectedScientists = InflectScientist(headOfTheCommission, DeclensionForms.Genitive);
+
             wordDoc.ReplaceText(HEAD_OF_THE_COMMISSION_PLACEHOLDER_IN_TEMPLATE,
-                            ScientistToStringDegreesFirst(headOfTheCommission, true),
+                            ScientistToStringDegreesFirst(inflectedScientists, true),
                              false);
         }
 
@@ -139,7 +142,9 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
 
             foreach (var member in membersOfTheCommission)
             {
-                membersNameAndDegrees += ScientistToStringDegreesFirst(member, true) + ", ";
+                var inflectedMember = InflectScientist(member, DeclensionForms.Genitive);
+
+                membersNameAndDegrees += ScientistToStringDegreesFirst(inflectedMember, true) + ", ";
             }
 
             membersNameAndDegrees = membersNameAndDegrees.Trim(' ', ',');
@@ -155,7 +160,9 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
 
             foreach (var author in authors)
             {
-                authorsNameAndDegrees += ScientistToStringNameFirst(author) + ", ";
+                var inflectedAuthor = InflectScientist(author, DeclensionForms.Instrumental);
+
+                authorsNameAndDegrees += ScientistToStringNameFirst(inflectedAuthor) + ", ";
             }
 
             authorsNameAndDegrees = authorsNameAndDegrees.Trim(' ', ',');
@@ -307,25 +314,30 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
             return surnameWithInitials;
         }
 
-        // TEST THIS METHOD | STOPPED HERE
+
         private Scientist InflectScientist(Scientist scientist, DeclensionForms declensionForm)
         {
             Scientist resultScientist = new Scientist();
 
+            // this provide more relevan result of declension
+            string[] lastWordsInDegreeWhichShouldBeRemovedForDeclension = new string[] { "каф", "наук" };
+
             // inflect degrees
             StringBuilder allDegreesInOneStringSeparatedByComa = new StringBuilder();
-            
+
             // Build one string with all degrees. It's required in order to make only 1 request to
             // Morph API for all degrees. 
             // IMPORTANT. If a degree contains a name of university department, than the university department name
             // should be removed from the degree string. The name of the university department in the degree name should 
             // be added after a HTTP request to Morph API have done
-            foreach(var degree in scientist.Degrees)
+            foreach (var degree in scientist.Degrees)
             {
-                if(degree.ToLower().Contains("кафед"))
+                var indexOfWordForRemoving = Array.FindIndex(lastWordsInDegreeWhichShouldBeRemovedForDeclension, el => degree.Contains(el));
+
+                if (indexOfWordForRemoving != -1)
                 {
                     allDegreesInOneStringSeparatedByComa.Append(
-                        degree.Substring(0, degree.IndexOf("кафедр")) + ",");
+                        degree.Substring(0, degree.IndexOf(lastWordsInDegreeWhichShouldBeRemovedForDeclension[indexOfWordForRemoving])) + ",");
                 }
                 else
                 {
@@ -347,29 +359,47 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
 
             foreach (var degree in splitedDegreesByComa)
             {
-                var appropriateDegreeBeforeManipulating = scientist.Degrees.
-                        FirstOrDefault(d => d.Contains(degree.Substring(0, degree.Length / 2))
+                var firstWordInDegree = new string(degree.TakeWhile(c => !char.IsWhiteSpace(c)).ToArray());
+
+                var theSameDegreeBeforeManipulating = scientist.Degrees.FirstOrDefault(d => 
+                        d.Contains(firstWordInDegree.Substring(0, firstWordInDegree.Length / 2))
                     );
 
-                var indexOfNameOfUniverDepartmentInDegree = appropriateDegreeBeforeManipulating?.IndexOf("кафед");
-
-                if (indexOfNameOfUniverDepartmentInDegree.HasValue &&
-                    indexOfNameOfUniverDepartmentInDegree.Value != -1)
+                if (!string.IsNullOrWhiteSpace(theSameDegreeBeforeManipulating))
                 {
-                    var degreeWithUniverDepartmentName = degree + " " + 
-                        appropriateDegreeBeforeManipulating.Substring(indexOfNameOfUniverDepartmentInDegree.Value);
+                    var indexOfWordForAdding = Array.FindIndex(lastWordsInDegreeWhichShouldBeRemovedForDeclension, el => theSameDegreeBeforeManipulating.Contains(el));
 
-                    resultDegrees.Add(degreeWithUniverDepartmentName);
+                    if (indexOfWordForAdding != -1)
+                    {
+                        var indexOfStartOfTextForAddingToInflectedDegree = theSameDegreeBeforeManipulating.IndexOf(lastWordsInDegreeWhichShouldBeRemovedForDeclension[indexOfWordForAdding]);
+                        var degreeWithUniverDepartmentName = degree + " " +
+                            theSameDegreeBeforeManipulating.Substring(indexOfStartOfTextForAddingToInflectedDegree);
+
+                        resultDegrees.Add(degreeWithUniverDepartmentName);
+                        continue;
+                    }
                 }
 
+
                 resultDegrees.Add(degree);
+
             }
 
 
             // inflect full name
-            var inflectedFullName = _declensionService.ParseUkr(scientist.FullName);
+            // for more relevant result surname should be inflected separately from name and father's name
+            var trimmedFullName = scientist.FullName.Trim(',', ' ');
 
-            var resultFullName = GetSpecificFormFromInflectedUkrText(inflectedFullName, declensionForm);
+            int indexOfFirstWhiteSpaceInFullName = Array.FindIndex(trimmedFullName.ToArray(), n => char.IsWhiteSpace(n));
+
+            var surname = trimmedFullName.Substring(0, indexOfFirstWhiteSpaceInFullName);
+            var nameAndFatherName = trimmedFullName.Substring(indexOfFirstWhiteSpaceInFullName + 1);
+
+            var inflectedSurname = _declensionService.ParseUkr(surname);
+            var inflectedNameAndFatherName = _declensionService.ParseUkr(nameAndFatherName);
+
+            var resultFullName = GetSpecificFormFromInflectedUkrText(inflectedSurname, declensionForm) + " "
+                + GetSpecificFormFromInflectedUkrText(inflectedNameAndFatherName, declensionForm);
 
 
             // build result object
@@ -385,7 +415,7 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
             {
                 DeclensionForms.Accusative => inflectedUkrText.Accusative,
                 DeclensionForms.Nominative => inflectedUkrText.Nominative,
-                DeclensionForms.Genetive => inflectedUkrText.Genitive,
+                DeclensionForms.Genitive => inflectedUkrText.Genitive,
                 DeclensionForms.Dative => inflectedUkrText.Dative,
                 DeclensionForms.Instrumental => inflectedUkrText.Instrumental,
                 DeclensionForms.Prepositional => inflectedUkrText.Prepositional,
@@ -397,7 +427,7 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
         private enum DeclensionForms
         {
             Nominative,
-            Genetive,
+            Genitive,
             Dative,
             Accusative,
             Instrumental,

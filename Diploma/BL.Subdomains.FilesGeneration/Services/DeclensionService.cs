@@ -2,6 +2,7 @@
 using BL.Interfaces.Subdomains.FilesGeneration.Services;
 using BL.Models.FilesGeneration;
 using Common.Configurations.Sections;
+using Common.Infrastructure.Exceptions;
 using Microsoft.Extensions.Options;
 using Morpher.WebService.V3;
 
@@ -42,6 +43,11 @@ namespace BL.Subdomains.FilesGeneration.Services
             catch(DailyLimitExceededException)
             {
                 result = GetInflectedUrkTextWithTheSameValueInAllLemmasForms(lemma);   
+            }
+            catch(Exception)
+            {
+                throw new DiplomaApiExpection("You have passed incorrect text. We can't get the right declension form for " +
+                    $"text - \"{lemma}\"", System.Net.HttpStatusCode.BadRequest);
             }
 
             return result;
