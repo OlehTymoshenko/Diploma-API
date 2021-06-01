@@ -7,6 +7,6 @@ namespace BL.Interfaces.Subdomains.FilesGeneration.Services
 {
     public interface IGeneratedFilesService
     {
-        Task<IEnumerable<DescriptionOfGeneratedFile>> GetUserGeneratedFiles(IEnumerable<Claim> userClaims);
+        Task<IEnumerable<DescriptionOfGeneratedFile>> GetUserGeneratedFilesAsync(IEnumerable<Claim> userClaims);
     }
 }

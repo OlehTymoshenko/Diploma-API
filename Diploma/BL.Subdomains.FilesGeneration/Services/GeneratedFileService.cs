@@ -22,7 +22,7 @@ namespace BL.Subdomains.FilesGeneration.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<DescriptionOfGeneratedFile>> GetUserGeneratedFiles(IEnumerable<Claim> userClaims)
+        public async Task<IEnumerable<DescriptionOfGeneratedFile>> GetUserGeneratedFilesAsync(IEnumerable<Claim> userClaims)
         {
             var user =  await GetUserFromDbAsync(userClaims);
 

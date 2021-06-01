@@ -1,115 +1,151 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="BL.DIExtension.BusinessLayerExtesions">
-    <Position X="11" Y="0.5" Width="2" />
+    <Position X="0.75" Y="15.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAA=</HashCode>
       <FileName>BusinessLayerExtesions.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="BL.Infrastructure.AutoMapperProfiles.AuthProfile">
-    <Position X="3.75" Y="0.5" Width="1.25" />
+    <Position X="3.75" Y="15.75" Width="1.5" />
     <TypeIdentifier />
   </Class>
   <Class Name="BL.Infrastructure.AutoMapperProfiles.DataForFilesProfile">
-    <Position X="5.25" Y="0.5" Width="1.75" />
+    <Position X="7.75" Y="15.75" Width="1.75" />
     <TypeIdentifier />
   </Class>
   <Class Name="BL.Infrastructure.AutoMapperProfiles.FilesGenerationProfile">
-    <Position X="1.5" Y="0.5" Width="2" />
-    <TypeIdentifier />
-  </Class>
-  <Class Name="BL.Utils.FileFormatToMIMETypeConverter">
-    <Position X="7.75" Y="0.5" Width="2.5" />
+    <Position X="5.5" Y="15.75" Width="2" />
     <TypeIdentifier />
   </Class>
   <Class Name="BL.Subdomains.Auth.Services.AuthSecurityHelper">
-    <Position X="3" Y="9.25" Width="2" />
+    <Position X="0.5" Y="11" Width="1.75" />
     <TypeIdentifier />
   </Class>
   <Class Name="BL.Subdomains.Auth.Services.AuthService" BaseTypeListCollapsed="true">
-    <Position X="6.75" Y="7" Width="1.5" />
+    <Position X="0.5" Y="8.75" Width="1.5" />
     <TypeIdentifier />
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="BL.Subdomains.Auth.Services.TokenService" BaseTypeListCollapsed="true">
-    <Position X="5.25" Y="9" Width="3" />
+    <Position X="2.5" Y="8.75" Width="2.75" />
     <TypeIdentifier />
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="BL.Subdomains.DataForFiles.Services.DegreeService" BaseTypeListCollapsed="true">
-    <Position X="9.5" Y="7" Width="1.5" />
+    <Position X="9" Y="13.25" Width="1.5" />
     <TypeIdentifier />
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="BL.Subdomains.DataForFiles.Services.PublishingHouseService" BaseTypeListCollapsed="true">
-    <Position X="11.25" Y="9.25" Width="2" />
+    <Position X="10.75" Y="13.25" Width="2" />
     <TypeIdentifier />
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="BL.Subdomains.DataForFiles.Services.ScientistService" BaseTypeListCollapsed="true">
-    <Position X="11.75" Y="7" Width="1.5" />
+    <Position X="13" Y="13.25" Width="1.5" />
     <TypeIdentifier />
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="BL.Subdomains.DataForFiles.Services.UniversityDepartmentService" BaseTypeListCollapsed="true">
-    <Position X="8.75" Y="9.25" Width="2.25" />
+    <Position X="6.5" Y="13.25" Width="2.25" />
     <TypeIdentifier />
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="BL.Subdomains.FilesGeneration.FileHandlerFactory">
-    <Position X="3.5" Y="5.5" Width="2.25" />
+  <Class Name="BL.Subdomains.FilesGeneration.FileHandlerFactory" BaseTypeListCollapsed="true">
+    <Position X="6.5" Y="8.5" Width="3.5" />
     <TypeIdentifier />
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="BL.Subdomains.FilesGeneration.FilesGenerationService">
-    <Position X="3.5" Y="7.25" Width="2.5" />
+  <Class Name="BL.Subdomains.FilesGeneration.FilesGenerationService" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="4.25" Width="3.5" />
     <TypeIdentifier />
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.NotesOfAuthorsInDocxHandler">
-    <Position X="0.75" Y="6.5" Width="2.5" />
+  <Class Name="BL.Subdomains.FilesGeneration.Services.DeclensionService" BaseTypeListCollapsed="true">
+    <Position X="4.5" Y="13.25" Width="1.75" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BL.Subdomains.FilesGeneration.Services.GeneratedFileService" BaseTypeListCollapsed="true">
+    <Position X="10.25" Y="8" Width="3" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BL.Utils.FileFormatToMIMETypeConverter">
+    <Position X="10.75" Y="15.75" Width="2.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandlers.ExpertiseActInDocxHandler">
+    <Position X="7" Y="4" Width="2.25" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandlers.NotesOfAuthorsInDocxHandler">
+    <Position X="0.5" Y="4" Width="2.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandlers.ProtocolOfMeetingOfExpertCommissionInDocxHandler">
+    <Position X="3.25" Y="4" Width="3.5" />
     <TypeIdentifier />
     <Lollipop Position="0.2" />
   </Class>
   <Interface Name="BL.Interfaces.Subdomains.Auth.Services.IAuthService">
-    <Position X="6.75" Y="2.75" Width="1.5" />
+    <Position X="0.5" Y="6.75" Width="1.5" />
     <TypeIdentifier />
   </Interface>
   <Interface Name="BL.Interfaces.Subdomains.Auth.Services.ITokenService">
-    <Position X="6.75" Y="4.75" Width="1.5" />
+    <Position X="2.5" Y="6.75" Width="2.5" />
     <TypeIdentifier />
   </Interface>
   <Interface Name="BL.Interfaces.Subdomains.DataForFiles.Services.IDegreeService">
-    <Position X="9.5" Y="2.75" Width="1.5" />
+    <Position X="9" Y="11" Width="1.5" />
     <TypeIdentifier />
   </Interface>
   <Interface Name="BL.Interfaces.Subdomains.DataForFiles.Services.IPublishingHouseService">
-    <Position X="11.25" Y="4.75" Width="2" />
+    <Position X="10.75" Y="11" Width="2" />
     <TypeIdentifier />
   </Interface>
   <Interface Name="BL.Interfaces.Subdomains.DataForFiles.Services.IScientistService">
-    <Position X="11.75" Y="2.75" Width="1.5" />
+    <Position X="13" Y="11" Width="1.5" />
     <TypeIdentifier />
   </Interface>
   <Interface Name="BL.Interfaces.Subdomains.DataForFiles.Services.IUniversityDepartmentService">
-    <Position X="8.75" Y="4.75" Width="2.25" />
+    <Position X="6.5" Y="11" Width="2.25" />
     <TypeIdentifier />
   </Interface>
   <Interface Name="BL.Interfaces.Subdomains.FilesGeneration.IFileHandlerFactory">
-    <Position X="3.25" Y="2.75" Width="2" />
+    <Position X="6.75" Y="6.5" Width="3.25" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="BL.Interfaces.Subdomains.FilesGeneration.IExpertiseActHandler">
+    <Position X="7.25" Y="2.25" Width="1.75" />
     <TypeIdentifier />
   </Interface>
   <Interface Name="BL.Interfaces.Subdomains.FilesGeneration.IFileHandler">
-    <Position X="1.5" Y="2.75" Width="1.5" />
+    <Position X="4.25" Y="0.5" Width="1.5" />
     <TypeIdentifier />
   </Interface>
   <Interface Name="BL.Interfaces.Subdomains.FilesGeneration.INotesOfAuthorsHandler">
-    <Position X="1.25" Y="4.5" Width="2" />
+    <Position X="0.5" Y="2.25" Width="2" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="BL.Interfaces.Subdomains.FilesGeneration.IProtocolOfMeetingOfExpertCommissionHandler">
+    <Position X="3.25" Y="2.25" Width="3.5" />
     <TypeIdentifier />
   </Interface>
   <Interface Name="BL.Interfaces.Subdomains.FilesGeneration.IFilesGenerationService">
-    <Position X="3.5" Y="4" Width="2.25" />
+    <Position X="10" Y="2.25" Width="3.25" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="BL.Interfaces.Subdomains.FilesGeneration.Services.IDeclensionService">
+    <Position X="4.5" Y="11" Width="1.75" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="BL.Interfaces.Subdomains.FilesGeneration.Services.IGeneratedFilesService">
+    <Position X="10.75" Y="6.5" Width="2" />
     <TypeIdentifier />
   </Interface>
   <Font Name="Segoe UI" Size="9" />

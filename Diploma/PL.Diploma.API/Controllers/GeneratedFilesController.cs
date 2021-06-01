@@ -15,7 +15,7 @@ namespace PL.Diploma.API.Controllers
     [Authorize(Policies.Client)]
     [Route("api/[controller]")]
     [ApiController]
-    public class GeneratedFilesController : ControllerBase
+    public class GeneratedFilesController : DiplomaApiControllerBase
     {
         IGeneratedFilesService _generatedFilesService;
 
@@ -27,7 +27,7 @@ namespace PL.Diploma.API.Controllers
         [HttpGet("get-list-of-generated-files")]
         public async Task<ActionResult<IEnumerable<DescriptionOfGeneratedFile>>> GetListOfGeneratedFilesForCurrentUser()
         {
-            var generatedFiles = await _generatedFilesService.GetUserGeneratedFiles(HttpContext.User.Claims);
+            var generatedFiles = await _generatedFilesService.GetUserGeneratedFilesAsync(HttpContext.User.Claims);
 
             return generatedFiles.ToList();
         }

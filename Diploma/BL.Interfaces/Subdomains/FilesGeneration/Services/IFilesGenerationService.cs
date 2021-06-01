@@ -1,7 +1,7 @@
-﻿using BL.Models.FilesGeneration;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using BL.Models.FilesGeneration;
 
 namespace BL.Interfaces.Subdomains.FilesGeneration
 {
