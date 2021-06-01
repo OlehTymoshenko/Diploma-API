@@ -167,17 +167,23 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
 
         private void SetPublicationNameWithItsStatistic(WordprocessingDocument wordDoc, string publicationNameWithItsStatstics)
         {
+            var resultScientificPublicationNameInGenetiveCase = publicationNameWithItsStatstics;
+            var resultScientificPublicationNamePreposition = publicationNameWithItsStatstics;
+
             // example: "навчальний посібник"
             int indexOfStartNameOfScientificWork = publicationNameWithItsStatstics.IndexOfAny(new char[] { '«', '"' });
-            string typeOfScientificWork = publicationNameWithItsStatstics.Substring(0, indexOfStartNameOfScientificWork);
 
-            var ukrInflectedTypeOfScientificWork = _declensionService.ParseUkr(typeOfScientificWork);
+            if (indexOfStartNameOfScientificWork != -1)
+            {
+                string typeOfScientificWork = publicationNameWithItsStatstics.Substring(0, indexOfStartNameOfScientificWork);
+                var ukrInflectedTypeOfScientificWork = _declensionService.ParseUkr(typeOfScientificWork);
 
-            var resultScientificPublicationNameInGenetiveCase = ukrInflectedTypeOfScientificWork.Genitive +
+                resultScientificPublicationNameInGenetiveCase = ukrInflectedTypeOfScientificWork.Genitive +
                 publicationNameWithItsStatstics.Substring(indexOfStartNameOfScientificWork).Trim(' ', ',');
 
-            var resultScientificPublicationNamePreposition = ukrInflectedTypeOfScientificWork.Prepositional +
-                publicationNameWithItsStatstics.Substring(indexOfStartNameOfScientificWork).Trim(' ', ',');
+                resultScientificPublicationNamePreposition = ukrInflectedTypeOfScientificWork.Prepositional +
+                    publicationNameWithItsStatstics.Substring(indexOfStartNameOfScientificWork).Trim(' ', ',');
+            }
 
             wordDoc.ReplaceText(PUBLISHING_NAME_WITH_ITS_STATISTIC_IN_GENITIVE_CASE_PLACEHOLDER_IN_TEMPLATE,
                             resultScientificPublicationNameInGenetiveCase.Trim(' ', ','),

@@ -108,15 +108,20 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
 
         private void SetPublicationNameWithItsStatistic(WordprocessingDocument wordDoc, string publicationNameWithItsStatstics)
         {
+            string resultStrForReplacement = publicationNameWithItsStatstics;
+
             // example: "навчальний посібник"
             int indexOfStartNameOfScientificWork = publicationNameWithItsStatstics.IndexOfAny(new char[] { '«', '"' });
-            string typeOfScientificWork = publicationNameWithItsStatstics.Substring(0, indexOfStartNameOfScientificWork);
+            
+            if (indexOfStartNameOfScientificWork != -1)
+            {
+                string typeOfScientificWork = publicationNameWithItsStatstics.Substring(0, indexOfStartNameOfScientificWork);
+                var ukrInflectedTypeOfScientificWork = _declensionService.ParseUkr(typeOfScientificWork);
 
-            var ukrInflectedTypeOfScientificWork = _declensionService.ParseUkr(typeOfScientificWork);
-
-            var resultStrForReplacement = ukrInflectedTypeOfScientificWork.Genitive +
-                publicationNameWithItsStatstics.Substring(indexOfStartNameOfScientificWork).Trim(' ', ',');
-
+                resultStrForReplacement = ukrInflectedTypeOfScientificWork.Genitive +
+                    publicationNameWithItsStatstics.Substring(indexOfStartNameOfScientificWork).Trim(' ', ',');
+            }
+            
             wordDoc.ReplaceText(PUBLISHING_NAME_WITH_ITS_STATISTIC_PLACEHOLDER_IN_TEMPLATE,
                             resultStrForReplacement,
                             false);

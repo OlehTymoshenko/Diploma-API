@@ -174,17 +174,22 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
 
         private void SetPublicationNameWithItsStatistic(WordprocessingDocument wordDoc, string publicationNameWithItsStatstics)
         {
+            string resultStrForReplacement = publicationNameWithItsStatstics;
+
             // example: "навчальний посібник"
             int indexOfStartNameOfScientificWork = publicationNameWithItsStatstics.IndexOfAny(new char[] { '«', '"' });
-            string typeOfScientificWork = publicationNameWithItsStatstics.Substring(0, indexOfStartNameOfScientificWork);
 
-            var ukrInflectedTypeOfScientificWork = _declensionService.ParseUkr(typeOfScientificWork);
+            if (indexOfStartNameOfScientificWork != -1)
+            {
+                string typeOfScientificWork = publicationNameWithItsStatstics.Substring(0, indexOfStartNameOfScientificWork);
+                var ukrInflectedTypeOfScientificWork = _declensionService.ParseUkr(typeOfScientificWork);
 
-            var resultStrForReplacement = ukrInflectedTypeOfScientificWork.Genitive +
-                publicationNameWithItsStatstics.Substring(indexOfStartNameOfScientificWork).Trim(' ', ',');
+                resultStrForReplacement = ukrInflectedTypeOfScientificWork.Genitive +
+                    publicationNameWithItsStatstics.Substring(indexOfStartNameOfScientificWork).Trim(' ', ',');
+            }
 
             wordDoc.ReplaceText(PUBLICATION_NAME_WITH_ITS_STATISTIC_PLACEHOLDER_IN_TEMPLATE,
-                            resultStrForReplacement.Trim(' ', ','),
+                            resultStrForReplacement,
                             false);
         }
 
@@ -388,19 +393,23 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
 
             // inflect full name
             // for more relevant result surname should be inflected separately from name and father's name
+            var resultFullName = scientist.FullName;
+
             var trimmedFullName = scientist.FullName.Trim(',', ' ');
 
             int indexOfFirstWhiteSpaceInFullName = Array.FindIndex(trimmedFullName.ToArray(), n => char.IsWhiteSpace(n));
 
-            var surname = trimmedFullName.Substring(0, indexOfFirstWhiteSpaceInFullName);
-            var nameAndFatherName = trimmedFullName.Substring(indexOfFirstWhiteSpaceInFullName + 1);
+            if(indexOfFirstWhiteSpaceInFullName != -1)
+            {
+                var surname = trimmedFullName.Substring(0, indexOfFirstWhiteSpaceInFullName);
+                var nameAndFatherName = trimmedFullName.Substring(indexOfFirstWhiteSpaceInFullName + 1);
 
-            var inflectedSurname = _declensionService.ParseUkr(surname);
-            var inflectedNameAndFatherName = _declensionService.ParseUkr(nameAndFatherName);
-
-            var resultFullName = GetSpecificFormFromInflectedUkrText(inflectedSurname, declensionForm) + " "
-                + GetSpecificFormFromInflectedUkrText(inflectedNameAndFatherName, declensionForm);
-
+                var inflectedSurname = _declensionService.ParseUkr(surname);
+                var inflectedNameAndFatherName = _declensionService.ParseUkr(nameAndFatherName);
+                
+                resultFullName = GetSpecificFormFromInflectedUkrText(inflectedSurname, declensionForm) + " "
+                    + GetSpecificFormFromInflectedUkrText(inflectedNameAndFatherName, declensionForm);
+            }
 
             // build result object
             resultScientist.Degrees = resultDegrees;

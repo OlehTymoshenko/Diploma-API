@@ -46,8 +46,12 @@ namespace BL.Subdomains.FilesGeneration.Services
             }
             catch(Exception)
             {
-                throw new DiplomaApiExpection("You have passed incorrect text. We can't get the right declension form for " +
-                    $"text - \"{lemma}\"", System.Net.HttpStatusCode.BadRequest);
+                // probably it's better throw exception... Who knows)
+
+                result = GetInflectedUrkTextWithTheSameValueInAllLemmasForms(lemma);
+
+                /*throw new DiplomaApiExpection("You have passed incorrect text. We can't get the right declension form for " +
+                    $"text - \"{lemma}\"", System.Net.HttpStatusCode.BadRequest);*/
             }
 
             return result;

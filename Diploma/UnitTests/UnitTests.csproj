@@ -14,11 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="FilesGeneration\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\BL.Subdomains.Auth\BL.Subdomains.Auth.csproj" />
+    <ProjectReference Include="..\BL.Subdomains.FilesGeneration\BL.Subdomains.FilesGeneration.csproj" />
     <ProjectReference Include="..\BL.Utils\BL.Utils.csproj" />
     <ProjectReference Include="..\DL.Entities\DL.Entities.csproj" />
   </ItemGroup>

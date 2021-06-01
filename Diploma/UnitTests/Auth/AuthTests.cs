@@ -1,4 +1,4 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using BL.Utils;
 using DL.Entities.Enums;
 using BL.Subdomains.Auth.Services;
@@ -32,12 +32,12 @@ namespace UnitTests.Auth
         [Test]
         public void FileFormatToMIME_FileFormatIsDOCX_ReturnCorrectMIME()
         {
-            var fileFormat = FileFormat.DOCX;
-            var expectedMIMEType = FileFormatToMIMETypeConverter.DOCX_MIME_TYPE;
+            var expectedResult = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
+            var fileFormat = FileFormat.DOCX;
             var actualMIMEType = FileFormatToMIMETypeConverter.FileFormatToMIME(fileFormat);
 
-            StringAssert.AreEqualIgnoringCase(expectedMIMEType, actualMIMEType);
+            StringAssert.AreEqualIgnoringCase(expectedResult, actualMIMEType);
         }
 
         [Test]
@@ -77,6 +77,22 @@ namespace UnitTests.Auth
             Assert.IsNotNull(actualClaims);
             Assert.IsTrue(actualClaims.Claims.Select(c => new { c.Type, c.Value }).
                 Contains(claims.Select(c => new { c.Type, c.Value}).First()));
+        }
+
+        [Test]
+        public void GetHashFromTextPassword_None_AlwaysReturnTheSameHashForTheSamePassword()
+        {
+            string testPasswordSalt = "Test_Salt_FoR_P@sword";
+            string passwordForTest = "testPassword@31";
+            string expectedHash = "+\u007f\u0016O�˗\u0004%PC8���j�ғx\u0010-���9�I���"; // algorithm HMACSHA256
+
+            AuthSecurityHelper authSecurityHelper = new AuthSecurityHelper(testPasswordSalt);
+
+
+            string actualHash = authSecurityHelper.GetPasswordHash(passwordForTest);
+
+
+            Assert.AreEqual(expectedHash, actualHash);
         }
     }
 }
