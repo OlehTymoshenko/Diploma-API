@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BL.Interfaces\BL.Interfaces.csproj" />
     <ProjectReference Include="..\BL.Utils\BL.Utils.csproj" />
+    <ProjectReference Include="..\Common.Infrastructure\Common.Infrastructure.csproj" />
     <ProjectReference Include="..\DL.Entities\DL.Entities.csproj" />
   </ItemGroup>
 

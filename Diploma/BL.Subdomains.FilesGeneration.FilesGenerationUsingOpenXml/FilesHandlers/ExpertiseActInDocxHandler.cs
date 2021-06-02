@@ -11,6 +11,7 @@ using DocumentFormat.OpenXml;
 using BL.Interfaces.Subdomains.FilesGeneration.Services;
 using System.Text;
 using System.Collections.Generic;
+using Common.Infrastructure.Exceptions;
 
 namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandlers
 {
@@ -62,29 +63,37 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
             /// all sync methods. 
             /// The reason for this strange behaviour is unknown
             //////////////////////////////////////////////////// 
+            try
+            {
+                SetFacultyNumber(wordDoc, saveExpertiseActModel.FacultyNumber);
 
-            SetFacultyNumber(wordDoc, saveExpertiseActModel.FacultyNumber);
+                SetHeadOfTheCommission(wordDoc, saveExpertiseActModel.HeadOfTheCommission);
 
-            SetHeadOfTheCommission(wordDoc, saveExpertiseActModel.HeadOfTheCommission);
+                SetMembersOfTheCommission(wordDoc, saveExpertiseActModel.MembersOfTheCommission);
 
-            SetMembersOfTheCommission(wordDoc, saveExpertiseActModel.MembersOfTheCommission);
+                SetAuthors(wordDoc, saveExpertiseActModel.AuthorsOfThePublication);
 
-            SetAuthors(wordDoc, saveExpertiseActModel.AuthorsOfThePublication);
+                SetPublicationNameWithItsStatistic(wordDoc, saveExpertiseActModel.PublishingNameWithItsStatics);
 
-            SetPublicationNameWithItsStatistic(wordDoc, saveExpertiseActModel.PublishingNameWithItsStatics);
+                SetProvostName(wordDoc, saveExpertiseActModel.ProvostName);
 
-            SetProvostName(wordDoc, saveExpertiseActModel.ProvostName);
+                await SetDateInFormat_ddMMMMyyyyAsync(wordDoc, saveExpertiseActModel.ActCreationDate);
 
-            await SetDateInFormat_ddMMMMyyyyAsync(wordDoc, saveExpertiseActModel.ActCreationDate);
+                await SetFieldsForSignatureAsync(wordDoc.MainDocumentPart.Document.Body,
+                    saveExpertiseActModel.HeadOfTheCommission.FullName,
+                    saveExpertiseActModel.MembersOfTheCommission.Select(m => m.FullName).ToArray(),
+                    saveExpertiseActModel.AuthorsOfThePublication.Select(m => m.FullName).ToArray(),
+                    saveExpertiseActModel.SecretaryOfTheCommission,
+                    saveExpertiseActModel.ChiefOfSecurityDepartment);
 
-            await SetFieldsForSignatureAsync(wordDoc.MainDocumentPart.Document.Body,
-                saveExpertiseActModel.HeadOfTheCommission.FullName,
-                saveExpertiseActModel.MembersOfTheCommission.Select(m => m.FullName).ToArray(),
-                saveExpertiseActModel.AuthorsOfThePublication.Select(m => m.FullName).ToArray(),
-                saveExpertiseActModel.SecretaryOfTheCommission,
-                saveExpertiseActModel.ChiefOfSecurityDepartment);
-
-            await SetDateInFormat_ddMMyyyyAsync(wordDoc.MainDocumentPart.Document.Body, saveExpertiseActModel.ActCreationDate);
+                await SetDateInFormat_ddMMyyyyAsync(wordDoc.MainDocumentPart.Document.Body, saveExpertiseActModel.ActCreationDate);
+            }
+            catch (Exception ex)
+            {
+                throw new DiplomaApiExpection("Smth went wrong. Probably you have passed incorrect data",
+                    System.Net.HttpStatusCode.BadRequest,
+                    ex);
+            }
 
             // save wordDoc and get bytes from it
             wordDoc.Close();

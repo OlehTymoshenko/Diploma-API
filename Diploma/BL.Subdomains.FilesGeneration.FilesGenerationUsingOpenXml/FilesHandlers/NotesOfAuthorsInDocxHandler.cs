@@ -11,6 +11,7 @@ using BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils;
 using BL.Interfaces.Subdomains.FilesGeneration;
 using BL.Interfaces.Subdomains.FilesGeneration.Services;
 using DL.Entities.Enums;
+using Common.Infrastructure.Exceptions;
 
 namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandlers
 {
@@ -54,26 +55,35 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
             /// The reason for this strange behaviour is unknown
             //////////////////////////////////////////////////// 
 
-            SetAuthorsFullNameWithDegrees(wordDoc, dataForCreating.Authors);
+            try
+            {
+                SetAuthorsFullNameWithDegrees(wordDoc, dataForCreating.Authors);
 
-            SetPublicationNameWithItsStatistic(wordDoc, dataForCreating.PublishingNameWithItsStatics);
+                SetPublicationNameWithItsStatistic(wordDoc, dataForCreating.PublishingNameWithItsStatics);
 
-            SetPublishingHouse(wordDoc, dataForCreating.PublishingHouse);
+                SetPublishingHouse(wordDoc, dataForCreating.PublishingHouse);
 
-            SetNameOfUniversityDepartment(wordDoc, dataForCreating.UniversityDepartmentName);
+                SetNameOfUniversityDepartment(wordDoc, dataForCreating.UniversityDepartmentName);
 
-            await SetDateAsync(wordDoc.MainDocumentPart.Document.Body, dataForCreating.PublishingDate);
+                await SetDateAsync(wordDoc.MainDocumentPart.Document.Body, dataForCreating.PublishingDate);
 
-            await SetAuthorsFullNameSignatureDateAsync(wordDoc.MainDocumentPart.Document.Body, dataForCreating.Authors,
-                dataForCreating.PublishingDate);
+                await SetAuthorsFullNameSignatureDateAsync(wordDoc.MainDocumentPart.Document.Body, dataForCreating.Authors,
+                    dataForCreating.PublishingDate);
 
 
-            await SetFullNameSignatureDateOfChiefOfUniversityDepartmentAsync(wordDoc.MainDocumentPart.Document.Body,
-                dataForCreating.FullNameOfChiefOfUniversityDepartment,
-                dataForCreating.PublishingDate);
+                await SetFullNameSignatureDateOfChiefOfUniversityDepartmentAsync(wordDoc.MainDocumentPart.Document.Body,
+                    dataForCreating.FullNameOfChiefOfUniversityDepartment,
+                    dataForCreating.PublishingDate);
+            }
+            catch(Exception ex)
+            {
+                throw new DiplomaApiExpection("Smth went wrong. Probably you have passed incorrect data",
+                    System.Net.HttpStatusCode.BadRequest,
+                    ex);
+            }
 
             // save wordDoc and get bytes from it
-            wordDoc.Close();
+            wordDoc?.Close();
 
             return new FileModel()
             {

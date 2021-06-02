@@ -5,6 +5,7 @@ using BL.Interfaces.Subdomains.FilesGeneration;
 using BL.Interfaces.Subdomains.FilesGeneration.Services;
 using BL.Models.FilesGeneration;
 using BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils;
+using Common.Infrastructure.Exceptions;
 using DL.Entities.Enums;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
@@ -64,37 +65,45 @@ namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandler
             using var memStream = await _templateLoader.LoadTemplateAsync(TemplateName);
             using var wordDoc = WordprocessingDocument.Open(memStream, true);
 
-            SetActCopyNumber(wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.ActCopyNumber);
+            try
+            {
+                SetActCopyNumber(wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.ActCopyNumber);
 
-            SetFacultyNumber(wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.FacultyNumber);
+                SetFacultyNumber(wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.FacultyNumber);
 
-            SetHeadOfTheCommissionFullName(wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.HeadOfTheCommissionName);
+                SetHeadOfTheCommissionFullName(wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.HeadOfTheCommissionName);
 
-            SetSecretaryOfTheCommissionFullName(wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.SecretaryOfTheCommissionName);
+                SetSecretaryOfTheCommissionFullName(wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.SecretaryOfTheCommissionName);
 
-            SetMembersOfTheCommissionFullNames (wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.MembersOfTheCommissionNames);
+                SetMembersOfTheCommissionFullNames (wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.MembersOfTheCommissionNames);
 
-            SetSpeakersFullNames(wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.SpeakersOfTheCommissionName);
+                SetSpeakersFullNames(wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.SpeakersOfTheCommissionName);
 
-            SetPublicationNameWithItsStatistic(wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.PublishingNameWithItsStatics);
+                SetPublicationNameWithItsStatistic(wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.PublishingNameWithItsStatics);
 
-            SetDecisionOfTheCommision(wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.IsPublicationAStateSecret, 
-                saveProtocolOfMeetingOfExpertCommissionModel.DoesPubliscationContainServiceInformation, 
-                saveProtocolOfMeetingOfExpertCommissionModel.DescriptionOfStateSecrectsOrServiceInformation,
-                saveProtocolOfMeetingOfExpertCommissionModel.DoesCommissionAllowAIssuingOfThePublication);
+                SetDecisionOfTheCommision(wordDoc, saveProtocolOfMeetingOfExpertCommissionModel.IsPublicationAStateSecret, 
+                    saveProtocolOfMeetingOfExpertCommissionModel.DoesPubliscationContainServiceInformation, 
+                    saveProtocolOfMeetingOfExpertCommissionModel.DescriptionOfStateSecrectsOrServiceInformation,
+                    saveProtocolOfMeetingOfExpertCommissionModel.DoesCommissionAllowAIssuingOfThePublication);
 
-            await SetDateInFormat_ddMMMMyyyyAsync(wordDoc.MainDocumentPart.Document.Body,
-                saveProtocolOfMeetingOfExpertCommissionModel.ProtocolCreationDate);
+                await SetDateInFormat_ddMMMMyyyyAsync(wordDoc.MainDocumentPart.Document.Body,
+                    saveProtocolOfMeetingOfExpertCommissionModel.ProtocolCreationDate);
 
-            await SetFieldsForSignatureAsync(wordDoc.MainDocumentPart.Document.Body,
-                saveProtocolOfMeetingOfExpertCommissionModel.HeadOfTheCommissionName,
-                saveProtocolOfMeetingOfExpertCommissionModel.SecretaryOfTheCommissionName,
-                saveProtocolOfMeetingOfExpertCommissionModel.MembersOfTheCommissionNames,
-                saveProtocolOfMeetingOfExpertCommissionModel.ChiefOfSecurityDepartment);
+                await SetFieldsForSignatureAsync(wordDoc.MainDocumentPart.Document.Body,
+                    saveProtocolOfMeetingOfExpertCommissionModel.HeadOfTheCommissionName,
+                    saveProtocolOfMeetingOfExpertCommissionModel.SecretaryOfTheCommissionName,
+                    saveProtocolOfMeetingOfExpertCommissionModel.MembersOfTheCommissionNames,
+                    saveProtocolOfMeetingOfExpertCommissionModel.ChiefOfSecurityDepartment);
 
-            await SetDateInFormat_ddMMyyyyAsync(wordDoc.MainDocumentPart.Document.Body,
-                saveProtocolOfMeetingOfExpertCommissionModel.ProtocolCreationDate);
-
+                await SetDateInFormat_ddMMyyyyAsync(wordDoc.MainDocumentPart.Document.Body,
+                    saveProtocolOfMeetingOfExpertCommissionModel.ProtocolCreationDate);
+            }
+            catch (Exception ex)
+            {
+                throw new DiplomaApiExpection("Smth went wrong. Probably you have passed incorrect data",
+                    System.Net.HttpStatusCode.BadRequest,
+                    ex);
+            }
             // save wordDoc and get bytes from it
             wordDoc.Close();
 
