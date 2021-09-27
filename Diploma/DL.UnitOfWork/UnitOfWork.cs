@@ -56,9 +56,9 @@ namespace DL.UnitOfWork
             return _appDbContext.SaveChanges();
         }
 
-        public async Task<int> SaveChangesAsync()
+        public Task<int> SaveChangesAsync()
         {
-            return await _appDbContext.SaveChangesAsync();
+            return _appDbContext.SaveChangesAsync();
         }
 
         public void Dispose()

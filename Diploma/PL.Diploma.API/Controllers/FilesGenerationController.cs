@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using BL.Interfaces.Subdomains.FilesGeneration;
 using BL.Models.FilesGeneration;
-using Microsoft.AspNetCore.Authorization;
 using PL.Utils.Auth;
 
 namespace PL.Diploma.API.Controllers

@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using BL.Interfaces.Subdomains.DataForFiles.Services;
 using BL.Models.DataForFiles;
-using Microsoft.AspNetCore.Authorization;
 using PL.Utils.Auth;
 
 namespace PL.Diploma.API.Controllers

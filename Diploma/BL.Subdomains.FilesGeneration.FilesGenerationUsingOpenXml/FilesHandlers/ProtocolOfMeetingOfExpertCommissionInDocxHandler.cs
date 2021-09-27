@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 using BL.Interfaces.Subdomains.FilesGeneration;
 using BL.Interfaces.Subdomains.FilesGeneration.Services;
 using BL.Models.FilesGeneration;
 using BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.Utils;
-using Common.Infrastructure.Exceptions;
 using DL.Entities.Enums;
-using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Wordprocessing;
+using Common.Infrastructure.Exceptions;
 
 namespace BL.Subdomains.FilesGeneration.FilesGenerationUsingOpenXml.FilesHandlers
 {

@@ -8,11 +8,5 @@ namespace Common.Configurations.Sections
         public string Secret { get; set; }
 
         public string PasswordSalt { get; set; }
-
-        public string GeneratedFilesPath { get; set; }
-
-        public string ExceptionLogs { get; set; }
-
-        public string ClientUrl { get; set; }
     }
 }

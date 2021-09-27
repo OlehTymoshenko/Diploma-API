@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PL.Utils.Auth
 {
@@ -30,7 +30,8 @@ namespace PL.Utils.Auth
                     ValidateIssuerSigningKey = true,
 
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
-                    LifetimeValidator = (notBefore, expires, token, parameters) => notBefore <= DateTime.UtcNow && expires >= DateTime.UtcNow,
+                    LifetimeValidator = (notBefore, expires, token, parameters) => 
+                        notBefore <= DateTime.UtcNow && expires >= DateTime.UtcNow,
 
                     ClockSkew = TimeSpan.Zero
                 };
